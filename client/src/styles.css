@@ -1,0 +1,317 @@
+/* Custom Styles for Schedule Meeting Form */
+
+body {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  overflow: scroll
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+.login {
+  display: flex;
+  height: 100vh;
+  max-width: 100vw;
+  background-color: #180c08;
+  background-image: linear-gradient(rgba(3, 40, 48, 0.944) 10%, rgba(74, 18, 6, 0.927) 40%, rgba(5, 68, 30, 0.511)),
+    url("components/img/chris-montgomery-smgTvepind4-unsplash.jpg");
+  background-size: cover;
+  padding: 0;
+  margin: 0;
+  justify-content: center;
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.login::-webkit-scrollbar {
+  display: none;
+}
+
+.container {
+  color: white;
+  position: absolute;
+  width: 500px;
+  height: 550px;
+  max-width: 500px;
+  max-height: 550px;
+  margin: 70px auto;
+  padding: 20px;
+  border: 1px inset rgba(74, 18, 6, 0.927);
+  border-radius: 8px;
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+}
+
+.home .welcome {
+  padding: 70px 30px 5px 30px;
+  /* color: rgba(237, 229, 229, 0.933); */
+  margin: 5px auto;
+  font-family: Calibri, sans-serif;
+}
+
+.modalHeader,
+.modalBody {
+  background: linear-gradient(90deg, rgba(3, 40, 48, 0.944) 35%, rgba(129, 53, 34, 0.403));
+  background-color: rgba(0, 0, 0, 0.926) !important;
+  color: whitesmoke;
+}
+
+.modal-dialog {
+  width: 60%;
+  height: 70%;
+  max-width: 60%;
+  max-height: 70%;
+  padding: 10px;
+}
+
+.modalForm {
+  background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+}
+
+.modalFooter {
+  margin-bottom: 20px;
+}
+
+.btn-close {
+  color: black;
+}
+
+.btn-close:hover {
+  background-color: gray;
+}
+
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  background-color: rgba(255, 255, 255, 0.34);
+  border-radius: 25%;
+}
+
+.nav-design {
+  display: flex;
+}
+
+span {
+  margin: 10px;
+  block-size: 30px;
+  padding: 0;
+}
+
+svg {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+svg path {
+  pointer-events: all;
+}
+
+/* svg >div> button {
+  pointer-events: none;
+} */
+
+/* .dropdown {
+  position: relative;
+  display: inline-block;
+} */
+
+/* .dropdown-button {
+  background-color: #3498db;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+} */
+
+/* Style for the dropdown content */
+/* .dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+} */
+
+/* Style for the dropdown items */
+/* .dropdown-item {
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  color: #333;
+} */
+
+.dropdownmenu {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+}
+
+.dropdownToggle {
+  background-color: transparent;
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  content: "";
+  
+}
+
+.dropdownToggle:after {
+  display: none !important; 
+  background-color: transparent !important; 
+}
+
+.dropdownToggle:hover {
+  background-color: transparent !important; 
+}
+
+.dropdownmenu .btn-primary {
+  --bs-btn-active-bg: transparent !important;
+  margin-bottom: 4px;
+}
+
+.dropdownmenu {
+  cursor: pointer;
+}
+
+.menuItem {
+  padding: 0px 8px;
+}
+
+.home {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 90px auto;
+}
+
+.trow:hover {
+  background-color: rgba(228, 225, 225, 02);
+  border: 3px solid #eef2f6
+}
+
+h2 {
+  text-align: center;
+  color: #007bff;
+}
+
+.navbar {
+  background-color: #051d26;
+  color: whitesmoke;
+  height: 70px;
+  border-bottom: 1px inset #6c6e6f;
+}
+
+form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  color: #c8cbcd;
+}
+
+input[type="email"],
+input[type="password"],
+.form-group textarea,
+input[type="textarea"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: transparent;
+  color: whitesmoke;
+  border: 2px outset #180c08;
+}
+
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="number"]:focus,
+.form-group textarea:focus {
+  background: transparent;
+  color: whitesmoke;
+}
+
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="datetime-local"]::placeholder,
+input[type="date"]::placeholder,
+input[type="number"]::placeholder,
+.form-group textarea::placeholder {
+  color: hsl(60, 23%, 95%);
+}
+
+input[type="email"]:-webkit-autofill,
+input[type="email"]:-webkit-autofill:hover,
+input[type="email"]:-webkit-autofill:focus,
+input[type="email"]:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: whitesmoke !important;
+}
+
+input[type="datetime-local"]:-webkit-autofill,
+input[type="datetime-local"]:-webkit-autofill:hover,
+input[type="datetime-local"]:-webkit-autofill:focus,
+input[type="datetime-local"]:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s;
+  -webkit-text-fill-color: whitesmoke !important;
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 20px auto;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+div .alert {
+  color: rgba(178, 12, 89, 0.888);
+  margin: 40px auto;
+  width: 99%;
+  position: relative;
+}
+
+div .link {
+  text-align: center;
+  padding: 35px;
+}
+
+.link a {
+  color: rgb(208, 204, 204);
+}
+
+.signup a:hover {
+  color: grey;
+}
+
+/* Responsive Styles */
+/* @media (max-width: 600px) {
+  .container {
+    max-width: 60%;
+  }
+} */
