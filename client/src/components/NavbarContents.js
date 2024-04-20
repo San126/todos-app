@@ -31,7 +31,7 @@ const NavbarContents = ({ visibility, reloadPage, data }) => {
     <>
       <nav className="navbar">
         <span class="nav-design"><h4>Todos App</h4></span>
-        <span>
+        <span className="nav-items">
           {!isEmpty(data?.username) && <span className='list-icon'>
             <Dropdown className='dropdownmenu' toggle={function noRefCheck() { }}>
               <DropdownToggle

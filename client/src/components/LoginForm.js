@@ -60,36 +60,40 @@ const LoginForm = ({ sendData }) => {
                             Invalid username or password!
                         </div>}
                         <form onSubmit={handleSubmit}>
-                            <div className="mb-3">
-                                <label htmlFor="email" className="form-label">Email address</label>
-                                <input
-                                    type="email"
-                                    className="form-control"
-                                    id="email"
-                                    placeholder="Enter your email"
-                                    value={username}
-                                    onChange={(e) => setUsername(e.target.value)}
-                                    required
-                                />
-                                <div className="invalid-feedback">
-                                    Please choose a username.
+                            <fieldset>
+                                <div className="mb-3">
+                                    <label htmlFor="email" className="form-label">Email address</label>
+                                    <input
+                                        type="email"
+                                        className="form-control"
+                                        id="email"
+                                        placeholder="Enter your email"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                    />
+                                    <div className="invalid-feedback">
+                                        Please choose a username.
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="password" className="form-label">Password</label>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    id="password"
-                                    placeholder="Enter your password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    required
-                                />
-                                <div className="invalid-feedback">
-                                    Please choose a password.
+                            </fieldset>
+                            <fieldset>
+                                <div className="mb-3">
+                                    <label htmlFor="password" className="form-label">Password</label>
+                                    <input
+                                        type="password"
+                                        className="form-control"
+                                        id="password"
+                                        placeholder="Enter your password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                    />
+                                    <div className="invalid-feedback">
+                                        Please choose a password.
+                                    </div>
                                 </div>
-                            </div>
+                            </fieldset>
                             <div className="d-grid">
                                 <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Login</button>
                             </div>

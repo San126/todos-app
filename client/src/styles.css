@@ -1,8 +1,8 @@
 /* Custom Styles for Schedule Meeting Form */
 
-body {
+body, html {
   margin: 0;
-  padding: 0;
+  padding: 0%;
   height: auto;
   overflow: scroll
 }
@@ -23,7 +23,7 @@ body::-webkit-scrollbar {
   margin: 0;
   justify-content: center;
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 
 .login::-webkit-scrollbar {
@@ -45,11 +45,12 @@ body::-webkit-scrollbar {
   background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
 }
 
-.home .welcome {
-  padding: 70px 30px 5px 30px;
+.welcome {
+  padding: 50px 30px 150px 30px;
   /* color: rgba(237, 229, 229, 0.933); */
-  margin: 5px auto;
-  font-family: Calibri, sans-serif;
+  margin: 3px;
+  font-size: 25px;
+  font-family: Georgia, Times, 'Times New Roman', serif, sans-serif;
 }
 
 .modalHeader,
@@ -88,14 +89,29 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   border-radius: 25%;
 }
 
-.nav-design {
-  display: flex;
+.invalid-feedback {
+  color: red;
 }
 
-span {
-  margin: 10px;
-  block-size: 30px;
+nav {
+  margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-design {
+  padding: 20px;
+}
+
+.nav-items {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
 }
 
 svg {
@@ -108,41 +124,6 @@ svg {
 svg path {
   pointer-events: all;
 }
-
-/* svg >div> button {
-  pointer-events: none;
-} */
-
-/* .dropdown {
-  position: relative;
-  display: inline-block;
-} */
-
-/* .dropdown-button {
-  background-color: #3498db;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-} */
-
-/* Style for the dropdown content */
-/* .dropdown-content {
-  display: none;
-  position: absolute;
-  background-color: #f9f9f9;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 1;
-} */
-
-/* Style for the dropdown items */
-/* .dropdown-item {
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-  color: #333;
-} */
 
 .dropdownmenu {
   display: inline-block;
@@ -157,16 +138,15 @@ svg path {
   padding: 0px;
   text-decoration: none;
   content: "";
-  
 }
 
 .dropdownToggle:after {
-  display: none !important; 
-  background-color: transparent !important; 
+  display: none !important;
+  background-color: transparent !important;
 }
 
 .dropdownToggle:hover {
-  background-color: transparent !important; 
+  background-color: transparent !important;
 }
 
 .dropdownmenu .btn-primary {
@@ -187,9 +167,23 @@ svg path {
   flex-direction: column;
   height: 100vh;
   max-width: 100%;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   padding: 90px auto;
+}
+
+.cards {
+  display: flex;
+  flex-direction: row;
+  gap: 230px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+col {
+  display: flex;
+  flex-direction: column;
 }
 
 .trow:hover {
@@ -202,11 +196,22 @@ h2 {
   color: #007bff;
 }
 
-.navbar {
+.navbar { 
   background-color: #051d26;
   color: whitesmoke;
   height: 70px;
   border-bottom: 1px inset #6c6e6f;
+}
+
+.navbar .menu {
+  color: white;
+  height: auto;
+  margin: 30px 30px 0 0;
+  width: 8%;
+  border-radius: 9px;
+  padding: 8px;
+  background-color: black;
+  border: 1px solid teal;
 }
 
 form {
@@ -215,6 +220,10 @@ form {
 
 .form-group {
   margin-bottom: 20px;
+}
+
+fieldset {
+  border: none;
 }
 
 label {
@@ -282,7 +291,20 @@ button {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin: 20px auto;
+  margin: 30px auto;
+}
+
+.home button {
+  display: block;
+  height: 60px;
+  width: 60px;
+  padding: 10px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  margin: 20px 20px;
 }
 
 button:hover {
