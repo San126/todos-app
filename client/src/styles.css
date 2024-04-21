@@ -54,8 +54,7 @@ body::-webkit-scrollbar {
 
 .modalHeader,
 .modalBody {
-  background: linear-gradient(90deg, rgba(3, 40, 48, 0.944) 35%, rgba(129, 53, 34, 0.403));
-  background-color: rgba(0, 0, 0, 0.926) !important;
+  background-color: rgb(16, 28, 28) !important;
   color: whitesmoke;
 }
 
@@ -195,7 +194,7 @@ svg path {
 
 .trow:hover {
   background-color: rgba(228, 225, 225, 02);
-  border: 3px solid #eef2f6
+  border: 3px solid black
 }
 
 h2 {
@@ -204,7 +203,7 @@ h2 {
 }
 
 .navbar {
-  background-color: #051d26;
+  background-color: teal;
   color: whitesmoke;
   height: 70px;
   border-bottom: 1px inset #6c6e6f;
@@ -244,6 +243,7 @@ input[type="password"],
 input[type="textarea"],
 input[type="datetime-local"],
 input[type="date"],
+input[type="title"],
 input[type="number"] {
   width: 100%;
   padding: 10px;
@@ -257,6 +257,7 @@ input[type="number"] {
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="datetime-local"]:focus,
+input[type="title"]:focus,
 input[type="date"]:focus,
 input[type="number"]:focus,
 .form-group textarea:focus {
@@ -265,12 +266,13 @@ input[type="number"]:focus,
 }
 
 input[type="email"]::placeholder,
+input[type="title"]::placeholder,
 input[type="password"]::placeholder,
 input[type="datetime-local"]::placeholder,
 input[type="date"]::placeholder,
 input[type="number"]::placeholder,
 .form-group textarea::placeholder {
-  color: hsl(60, 23%, 95%);
+  color: hsl(60, 2%, 60%);
 }
 
 input[type="email"]:-webkit-autofill,
@@ -316,6 +318,24 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.table {
+  width: 80%;
+  margin: 40px auto;
+  border: 2px solid #6c6e6f;
+  color: white;
+}
+
+th,
+td {
+  text-align: center;
+  align-content: center;
+  padding: 10px;
+}
+
+tr {
+  height: 70px
 }
 
 div .alert {

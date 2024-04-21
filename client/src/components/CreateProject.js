@@ -40,11 +40,11 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
         <Form class="modalForm" action="">
           <div className="form-group">
             <label htmlFor="title">Project Title</label>
-            <input type="email" value={title} className="form-control" id="teacherEmail" placeholder={title} onChange={(e) => setTitle(e.target.value)} required />
+            <input type="email" value={title} className="form-control" id="teacherEmail" placeholder="Enter project name" onChange={(e) => setTitle(e.target.value)} required />
           </div>
           <div className="form-group">
             <label htmlFor="userEmail">Created By:</label>
-            <input type="email" value={userName} className="form-control" id="teacherEmail" placeholder={userName} required />
+            <input type="email" value={userName} className="form-control" id="teacherEmail" placeholder={userName} readOnly />
           </div>
         </Form>
         <Modal.Footer className='modalFooter'>

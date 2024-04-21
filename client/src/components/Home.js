@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { upperFirst } from 'lodash';
 import moment from 'moment';
+import { Row, Col, Button, Card, CardBody, CardFooter } from 'react-bootstrap';
 
 import NavbarContents from './NavbarContents';
-import { Row, Col, Button, Card, CardBody, CardFooter } from 'react-bootstrap';
 import CreateProject from './CreateProject';
+import ProjectList from './ProjectList';
 
 const Home = ({ }) => {
     const [classes, setClasses] = useState([]);
     const [formVisibility, setFormVisibility] = useState();
+    const [listVisibility, setListVisibility] = useState();
     const details = (localStorage.getItem('user'));
     const [data, setData] = useState(JSON.parse(details));
     const { username = "" } = data || {};
@@ -32,6 +34,10 @@ const Home = ({ }) => {
         setFormVisibility(!formVisibility);
     };
 
+    const handleListVisibility = () => {
+        setListVisibility(!listVisibility);
+    }
+
     return (
         <>
             <Row>
@@ -54,7 +60,7 @@ const Home = ({ }) => {
                         <Col md={4}>
                             <Card className='prolist'>
                                 <CardBody>
-                                    <Button className="prolist">
+                                    <Button className="prolist" onClick={handleListVisibility}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill='currentColor'><path d="M40 48C26.7 48 16 58.7 16 72v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V72c0-13.3-10.7-24-24-24H40zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM16 232v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V232c0-13.3-10.7-24-24-24H40c-13.3 0-24 10.7-24 24zM40 368c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24H88c13.3 0 24-10.7 24-24V392c0-13.3-10.7-24-24-24H40z" /></svg>
                                     </Button>
                                 </CardBody>
@@ -75,6 +81,7 @@ const Home = ({ }) => {
                 </div>
             </Row>
             <div><CreateProject showModal={formVisibility} handleVisibility={handleVisibility} props={data} reloadPage={handleReloadPage} /></div>
+            <div><ProjectList showModal={listVisibility} handleVisibility={handleListVisibility} /></div>
         </>
     );
 }

@@ -57,9 +57,9 @@ router.post('/login', async (req, res) => {
 
 router.get('/projectlist', async (req, res) => {
   try {
-    console.log(req.query.userName)
+    const createdBy = req.query.userName;
     if (req.query) {
-      const projectList = await ProjectModel.find();
+      const projectList = await ProjectModel.find({ createdBy });
       return res.json(projectList);
     }
     return res.status(500).json({
