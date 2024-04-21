@@ -91,7 +91,7 @@ const LoginForm = ({ sendData }) => {
                             </div>
                         </form>
                     </div>
-                    <div class="link"><p><a href="./signup">Create an account</a></p></div>
+                    <div className="link"><p><a href="./signup">Create an account</a></p></div>
                 </div>
             </div>
         </>

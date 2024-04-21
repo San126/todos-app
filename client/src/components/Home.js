@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { upperFirst } from 'lodash';
-import moment from 'moment';
 import { Row, Col, Button, Card, CardBody, CardFooter } from 'react-bootstrap';
 
 import NavbarContents from './NavbarContents';
@@ -8,21 +7,11 @@ import CreateProject from './CreateProject';
 import ProjectList from './ProjectList';
 
 const Home = ({ }) => {
-    const [classes, setClasses] = useState([]);
     const [formVisibility, setFormVisibility] = useState();
     const [listVisibility, setListVisibility] = useState();
     const details = (localStorage.getItem('user'));
     const [data, setData] = useState(JSON.parse(details));
     const { username = "" } = data || {};
-    let count = 0;
-
-    useEffect(() => {
-        // Fetch data from the server
-        fetch(`http://localhost:3001/auth/schedulelist?userName=${username}`)
-            .then(response => response.json())
-            .then(data => setClasses([...classes, ...data]))
-            .catch(error => console.error('Error fetching data:', error));
-    }, [username]);
 
     const handleReloadPage = () => {
         const details = (localStorage.getItem('user'));
@@ -44,7 +33,7 @@ const Home = ({ }) => {
                 <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} />
                 <div className="home">
                     <Row>
-                        <p class="welcome"><h3>Welcome {upperFirst(username?.split('@')[0])}</h3></p>
+                        <p className="welcome"><h3>Welcome {upperFirst(username?.split('@')[0])}</h3></p>
                     </Row>
                     <Row className="cards">
                         <Col md={4}>

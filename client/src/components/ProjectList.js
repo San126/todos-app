@@ -57,7 +57,7 @@ const ProjectList = ({ showModal, handleVisibility }) => {
                         </div>}
                 </div>
                 <Modal.Footer className='modalFooter'>
-                    <span><button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Close</button></span>
+                    <span><button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Close</button></span>
                 </Modal.Footer>
             </Modal.Body>
         </Modal>

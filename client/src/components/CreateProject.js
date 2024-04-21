@@ -37,7 +37,7 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
         <Modal.Title className='modalTitle'>New Project</Modal.Title>
       </Modal.Header>
       <Modal.Body className="modalBody" >
-        <Form class="modalForm" action="">
+        <Form className="modalForm" action="">
           <div className="form-group">
             <label htmlFor="title">Project Title</label>
             <input type="email" value={title} className="form-control" id="teacherEmail" placeholder="Enter project name" onChange={(e) => setTitle(e.target.value)} required />
@@ -48,8 +48,8 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
           </div>
         </Form>
         <Modal.Footer className='modalFooter'>
-          <span><button type="button" class="btn btn-primary" onClick={createNewProject}>Create</button></span>
-          <span><button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Cancel</button></span>
+          <span><button type="button" className="btn btn-primary" onClick={createNewProject}>Create</button></span>
+          <span><button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Cancel</button></span>
         </Modal.Footer>
       </Modal.Body>
     </Modal >

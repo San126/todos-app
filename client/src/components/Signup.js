@@ -92,7 +92,7 @@ const Signup = () => {
                                 <button type="submit" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Sign Up</button>
                             </div>
                         </form>
-                        <div class="link"><p><a href='/'>Login</a></p></div>
+                        <div className="link"><p><a href='/'>Login</a></p></div>
                     </div>
                 </div>
             </div>
