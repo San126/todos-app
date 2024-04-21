@@ -6,12 +6,10 @@ import '../styles.css';
 
 import NavbarContents from './NavbarContents';
 
-//demo login page not active
 const LoginForm = ({ sendData }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(''); //success if successfully logged in logging in if trird loggin but not successful yet, unsuccessful if tried and failed 
-    // const [userDetails, setUserDetails] = useState('');
+    const [loginStatus, setLoginStatus] = useState(''); 
 
     const navigate = useNavigate();
 
@@ -23,25 +21,19 @@ const LoginForm = ({ sendData }) => {
                 username,
                 password
             });
-            // if(response){
             navigate('/home');
             setLoginStatus('success');
             sendData(response.config.data);
             localStorage.setItem('user', response.config.data);
             console.log(response.config.data)
-            // setUserDetails(response.config.data);
-            console.log('Logged in successfully:', response.config.data);
-            // }
-            // else{
-            //     console.log(response)
-            // }
+            console.log('Logged in successfully:', response.config.data)
         }
         catch (error) {
             if (error.response?.status === 401) {
                 setLoginStatus('unsuccessful');
             }
             else {
-                alert(error.response.data.message);
+                alert(error.response?.data?.message);
             }
             console.error('Error while login', error);
         }
