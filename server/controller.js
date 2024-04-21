@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router()
+const router = express.Router();
 
 const { hash, compare } = require('bcryptjs');
-// const { verify } = require('jsonwebtoken');
 
-const { LoginModel, Project, Todo} = require('../models/Models');
+const { LoginModel, ProjectModel, TodoModel } = require('../models/Models');
+const getNextSequenceValue = require('../utils/autoIncrement');
 
 router.get('/', async (req, res) => {
   res.send('Hello Express!! 👋, this is Auth end point')
@@ -59,7 +59,7 @@ router.get('/projectlist', async (req, res) => {
   try {
     console.log(req.query.userName)
     if (req.query) {
-      const projectList = await Project.find();
+      const projectList = await ProjectModel.find();
       return res.json(projectList);
     }
     return res.status(500).json({
@@ -72,25 +72,52 @@ router.get('/projectlist', async (req, res) => {
   }
 });
 
-router.get('/todolist', async (req, res) => {
-    try {
-      console.log(req.query.userName)
-      if (req.query) {
-        const todoList = await Todo.find();
-        return res.json(todoList);
-      }
+router.post('/create', async (req, res) => {
+  try {
+    const { createdBy, title } = req.body;
+    const createdAt = new Date();
+    const projectDetails = await ProjectModel.findOne({ title });
+    if (projectDetails) {
       return res.status(500).json({
-        message: 'You are not logged in! 😢',
-        type: 'error',
-      })
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error' });
+        message: "Project name already exists",
+        type: 'warning'
+      });
     }
-  });
+
+    const projectId = await getNextSequenceValue('projectId');
+
+    const newProject = new ProjectModel({
+      projectId,
+      createdAt,
+      createdBy,
+      title
+    });
+
+    await newProject.save();
+    res.status(201).json(newProject);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/todolist', async (req, res) => {
+  try {
+    console.log(req.query.userName)
+    if (req.query) {
+      const todoList = await Todo.find();
+      return res.json(todoList);
+    }
+    return res.status(500).json({
+      message: 'You are not logged in! 😢',
+      type: 'error',
+    })
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.post('/logout', async (req, res) => {
-//   res.clearCookie("refreshToken");
   return res.json({
     message: "Logged out successfully",
     type: "success"

@@ -1,6 +1,7 @@
 /* Custom Styles for Schedule Meeting Form */
 
-body, html {
+body,
+html {
   margin: 0;
   padding: 0%;
   height: auto;
@@ -47,8 +48,6 @@ body::-webkit-scrollbar {
 
 .welcome {
   padding: 50px 30px 150px 30px;
-  /* color: rgba(237, 229, 229, 0.933); */
-  margin: 3px;
   font-size: 25px;
   font-family: Georgia, Times, 'Times New Roman', serif, sans-serif;
 }
@@ -111,7 +110,7 @@ nav {
   flex-direction: row;
   align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding: 0px 30px 10px 10px;
 }
 
 svg {
@@ -165,25 +164,33 @@ svg path {
 .home {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  max-width: 100%;
-  /* justify-content: center; */
+  width: 100%;
   align-items: center;
-  padding: 90px auto;
 }
 
 .cards {
   display: flex;
   flex-direction: row;
-  gap: 230px;
-  width: 100%;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  width: 50%;
+  border: none;
 }
 
-col {
+.cards .add,
+.cards .prolist,
+.cards .project {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.cards footer .add,
+.cards footer .prolist,
+.cards footer .project {
+  border: none;
 }
 
 .trow:hover {
@@ -196,7 +203,7 @@ h2 {
   color: #007bff;
 }
 
-.navbar { 
+.navbar {
   background-color: #051d26;
   color: whitesmoke;
   height: 70px;
@@ -296,8 +303,8 @@ button {
 
 .home button {
   display: block;
-  height: 60px;
-  width: 60px;
+  height: 70px;
+  width: 70px;
   padding: 10px;
   color: #ffffff;
   background-color: #007bff;
