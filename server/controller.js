@@ -1,7 +1,9 @@
 const express = require('express');
-var ObjectId = require('mongodb').ObjectId;
-const router = express.Router();
+const ObjectId = require('mongodb').ObjectId;
+const { snakeCase, isEmpty } = require('lodash');
 const { hash, compare } = require('bcryptjs');
+
+const router = express.Router();
 
 const { LoginModel, ProjectModel, TodoModel } = require('../models/Models');
 const getNextSequenceValue = require('../utils/autoIncrement');
@@ -85,7 +87,7 @@ router.post('/create', async (req, res) => {
       });
     }
 
-    const projectId = await getNextSequenceValue('projectId');
+    const projectId = await getNextSequenceValue('projects');
 
     const newProject = new ProjectModel({
       projectId,
@@ -105,29 +107,70 @@ router.get('/details', async (req, res) => {
   try {
     const projectId = req.query.projectId;
     const projectIdAsObjectId = new ObjectId(projectId);
-    console.log(projectIdAsObjectId)
-    const projectDetails = await ProjectModel.findOne({ _id: projectIdAsObjectId });
-    // if (projectDetails) {
-    res.status(201).json(projectDetails);
-    // }
+
+    if (projectIdAsObjectId) {
+      const projectDetails = await ProjectModel.findOne({ _id: projectIdAsObjectId });
+      const todoIds = projectDetails?.listOfTodos?.taskIds || [];
+      const todoListDetails = todoIds && await getTodoList(todoIds) || {};
+      const data = { ...projectDetails, todoListDetails }
+      res.status(201).json(data);
+    }
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-router.get('/todolist', async (req, res) => {
+const getTodoList = async (todoIds) => {
   try {
-    console.log(req.query.userName)
-    if (req.query) {
-      const todoList = await Todo.find();
-      return res.json(todoList);
-    }
-    return res.status(500).json({
-      message: 'You are not logged in! 😢',
-      type: 'error',
-    })
+    const todoList = await TodoModel.find({ taskId: { $in: [...todoIds] } });
+    return todoList;
   } catch (error) {
     console.error(error);
+    return ({ error: 'Internal Server Error' });
+  }
+}
+
+router.post('/createtask', async (req, res) => {
+  try {
+    const { projectId = '', description = '', statusValue = '', createdBy = '' } = req.body;
+    const projectIdAsObjectId = new ObjectId(projectId);
+    let todoTasks = [];
+    const updatedAt = new Date();
+
+    const newTodo = new TodoModel({
+      updatedAt,
+      createdBy,
+      status: statusValue,
+      description
+    });
+
+    if (projectIdAsObjectId) {
+      let taskId = '';
+      let projectDetails = await ProjectModel.findOne({ _id: projectIdAsObjectId });
+      if (!isEmpty(projectDetails?.listOfTodos?.taskIds)) {
+        todoTasks = projectDetails.listOfTodos.taskIds || [];
+      }
+      const toDoDetails = await TodoModel.findOne({ description: snakeCase(description) });
+
+      if (isEmpty(toDoDetails)) {
+        taskId = await getNextSequenceValue('todos');
+      }
+
+      const taskIdsArray = projectDetails?.listOfTodos?.taskIds ?? [];
+      taskIdsArray.push(taskId);
+      projectDetails.listOfTodos.taskIds = taskIdsArray;
+
+      newTodo.taskId = toDoDetails?.taskId || taskId;
+      newTodo.createdAt = updatedAt;
+      
+      const projectUpdate = new ProjectModel(projectDetails);
+
+      await newTodo.save();
+      await projectUpdate.save();
+
+      res.status(201).json({ message: "Task Updated Successfully", data: { newTodo, projectUpdate } });
+    }
+  } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

@@ -67,7 +67,7 @@ body::-webkit-scrollbar {
 }
 
 .modalForm {
-  background: linear-gradient(200deg, rgba(44, 11, 3, 0.819), rgba(74, 28, 17, 0.316));
+  background: rgb(16, 28, 28) !important;;
 }
 
 .modalFooter {
@@ -165,6 +165,7 @@ svg path {
   flex-direction: column;
   width: 100%;
   height: 100vh;
+  margin-top: 150px;
   align-items: center;
 }
 
@@ -194,6 +195,7 @@ svg path {
 }
 
 .details {
+  margin-top: 100px;
   padding: 25px;
 }
 
@@ -211,9 +213,10 @@ svg path {
   background-color: transparent;
   /* color: whitesmoke; */
   border: none;
-  border-bottom: 1px solid gray; /* Adjust the color and thickness as needed */
+  border-bottom: 1px solid gray;
+  /* Adjust the color and thickness as needed */
   line-height: 1.5;
-/* text-decoration: 2px solid underline grey; */
+  /* text-decoration: 2px solid underline grey; */
 }
 
 .input-border-none:focus,
@@ -233,13 +236,14 @@ svg path {
   align-items: center;
 }
 
-.todolist .addIcon{
-  width: 35%;
-  height: 35%;
+.todolist .addIcon {
+  width: 50%;
+  height: 60%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
 /* .details input[type="title"]::placeholder {
   color: black !important;
 } */
@@ -255,6 +259,7 @@ h2 {
 }
 
 .navbar {
+  position: fixed;
   background-color: teal;
   color: whitesmoke;
   height: 70px;
@@ -292,6 +297,7 @@ label {
 input[type="email"],
 input[type="password"],
 .form-group textarea,
+.form-group select,
 input[type="textarea"],
 input[type="datetime-local"],
 input[type="date"],
@@ -312,7 +318,8 @@ input[type="datetime-local"]:focus,
 input[type="title"]:focus,
 input[type="date"]:focus,
 input[type="number"]:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   background: transparent;
   color: whitesmoke;
 }
@@ -323,7 +330,8 @@ input[type="password"]::placeholder,
 input[type="datetime-local"]::placeholder,
 input[type="date"]::placeholder,
 input[type="number"]::placeholder,
-.form-group textarea::placeholder {
+.form-group textarea::placeholder,
+.form-group select::placeholder {
   color: hsl(60, 2%, 60%);
 }
 
@@ -341,6 +349,13 @@ input[type="datetime-local"]:-webkit-autofill:focus,
 input[type="datetime-local"]:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
   -webkit-text-fill-color: whitesmoke !important;
+}
+
+.form-group select>option {
+  background-color: black;
+  /* transition: background-color 5000s ease-in-out 0s; */
+  /* transition: background-color 5000s ease-in-out 0s; */
+  /* -webkit-text-fill-color: black !important;} */
 }
 
 button {
@@ -377,6 +392,11 @@ button:hover {
   margin: 40px auto;
   border: 2px solid #6c6e6f;
   color: white;
+}
+
+.details .table {
+  border: none;
+  border-top: 3px double #6c6e6f;
 }
 
 th,

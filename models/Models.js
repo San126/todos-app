@@ -9,12 +9,15 @@ const loginSchema = new Schema({
 const projectSchema = new Schema({
   projectId: { type: Number, required: true, unique: true },
   title: { type: String, required: true },
-  listOfTodos: { type: Object },
+  listOfTodos: {
+    taskIds: { type: Array }
+  },
   createdAt: { type: Date, required: true },
   createdBy: { type: String, required: true }
 });
 
 const todoSchema = new Schema({
+  taskId: { type: Number, required: true, unique: true },
   status: { type: String, required: true },
   description: { type: String, required: true },
   updatedAt: { type: Date, required: true },

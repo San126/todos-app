@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
-import { startCase } from 'lodash';
+import { startCase, isEmpty } from 'lodash';
 import { Row, Col, Button } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import NavbarContents from './NavbarContents';
+import CreateTask from './CreateTask';
 
 const ProjectDetails = ({ props }) => {
     const [formVisibility, setFormVisibility] = useState();
@@ -26,10 +27,12 @@ const ProjectDetails = ({ props }) => {
         // Fetch data from the server
         fetch(`http://localhost:3001/auth/details?projectId=${projectId}`)
             .then(response => response.json())
-            .then(data => setValues([...values, data]))
+            .then(data => (setValues([data._doc]),
+                setTodos([data.todoListDetails])))
             .catch(error => console.error('Error fetching data:', error));
-    }, [username]);
-    console.log(...values)
+    }, [projectId]);
+    console.log(values, todos)
+
     const handleReloadPage = () => {
         const details = (localStorage.getItem('user'));
         setData(JSON.parse(details));
@@ -40,8 +43,8 @@ const ProjectDetails = ({ props }) => {
         setFormVisibility(!formVisibility);
     };
 
-    const handleListVisibility = () => {
-        setListVisibility(!listVisibility);
+    const deleteTask = (taskId) => {
+        // setListVisibility(!listVisibility);
     }
 
     const handleTodoAdd = () => {
@@ -81,16 +84,16 @@ const ProjectDetails = ({ props }) => {
                             <h3>Todos:</h3>
                         </Col>
                         <Col md={1}>
-                            <Button className='addIcon' onClick={handleTodoAdd}>
+                            <Button className='addIcon' onClick={handleVisibility}>
                                 <FontAwesomeIcon icon={faAdd} />
                             </Button>
                         </Col>
                         <Col md={3}></Col>
                     </Row>
                     <Row>
-                        <Col md={3}></Col>
-                        <Col md={6}>
-                            {[...values]?.listOfTodos ?
+                        <Col md={2}></Col>
+                        <Col md={8}>
+                            {!isEmpty(todos[0]) ?
                                 <table className="table table-striped table-sm" id="dataTable" >
                                     <thead className='thead'>
                                         <tr className='thead'>
@@ -100,15 +103,16 @@ const ProjectDetails = ({ props }) => {
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    {values[0]?.todoList?.map((item) => (
+                                    {todos[0]?.map((item) => (
                                         <tbody>
                                             <script>{count += 1}</script>
                                             <tr className='trow' index={item?._id} data-toggle="modal">
                                                 <td>{count}{' '}</td>
                                                 <td>{startCase(item?.description)}{' '}</td>
                                                 <td>{startCase(item?.status)}{' '}</td>
-                                                <td colSpan={3}>
-                                                    <FontAwesomeIcon icon={faEye} /><FontAwesomeIcon icon={faEdit} /><FontAwesomeIcon icon={faTrash} />
+                                                <td colSpan={2}>
+                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} />
+                                                    <FontAwesomeIcon icon={faTrash} onClick={() => { deleteTask(item?.taskId) }} />
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -116,7 +120,7 @@ const ProjectDetails = ({ props }) => {
                                     }
                                 </table>
                                 :
-                                todos ?
+                                !isEmpty(todos) ?
                                     <></>
                                     :
                                     <div className="alert alert-warning" role="alert">
@@ -124,11 +128,20 @@ const ProjectDetails = ({ props }) => {
                                     </div>
                             }
                         </Col>
-                        <Col md={3}></Col>
+                        <Col md={2}></Col>
                     </Row>
                     {/* <Col md={4}></Col> */}
                 </div>
+                <Row>
+                    <Col md={6}></Col>
+                    <Col md={3}></Col>
+                    <Col md={2}>
+                        <span><button type="button" className="btn btn-primary">Save Changes</button></span>
+                    </Col>
+                    <Col md={2}></Col>
+                </Row>
             </Row>
+            <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} /></div>
         </>
     );
 }
