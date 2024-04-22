@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { upperFirst } from 'lodash';
-import { Row, Col, Button, Card, CardBody, CardFooter } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Row, Col, Button, Card, CardBody, CardFooter, Dropdown, DropdownButton, DropdownItem, DropdownMenu } from 'react-bootstrap';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 
 import NavbarContents from './NavbarContents';
 import CreateProject from './CreateProject';
@@ -10,9 +14,19 @@ const Home = ({ }) => {
     const [formVisibility, setFormVisibility] = useState();
     const [listVisibility, setListVisibility] = useState();
     const details = (localStorage.getItem('user'));
+    const [values, setValues] = useState();
     const [data, setData] = useState(JSON.parse(details));
     const { username = "" } = data || {};
 
+    useEffect(() => {
+        // Fetch data from the server
+        fetch(`http://localhost:3001/auth/projectlist?userName=${username}`)
+            .then(response => response.json())
+            .then(data => setValues([...data]))
+            .catch(error => console.error('Error fetching data:', error));
+    }, [username]);
+
+    console.log(values);
     const handleReloadPage = () => {
         const details = (localStorage.getItem('user'));
         setData(JSON.parse(details));
@@ -25,6 +39,16 @@ const Home = ({ }) => {
 
     const handleListVisibility = () => {
         setListVisibility(!listVisibility);
+    }
+
+    const handleList = () => {
+        values?.map((item) => {
+
+            return (
+                <DropdownItem href="#/action-1">{item && item.title}</DropdownItem>
+            )
+        })
+
     }
 
     return (
@@ -59,9 +83,15 @@ const Home = ({ }) => {
                         <Col md={4}>
                             <Card className='project'>
                                 <CardBody>
-                                    <Button className="project" >
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 576 512"><path d="M88.7 223.8L0 375.8V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H416c35.3 0 64 28.7 64 64v32H144c-22.8 0-43.8 12.1-55.3 31.8zm27.6 16.1C122.1 230 132.6 224 144 224H544c11.5 0 22 6.1 27.7 16.1s5.7 22.2-.1 32.1l-112 192C453.9 474 443.4 480 432 480H32c-11.5 0-22-6.1-27.7-16.1s-5.7-22.2 .1-32.1l112-192z" /></svg>
-                                    </Button>
+                                    <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon icon={faFolderOpen} />}>
+                                        {values && values.map((item) => (
+                                            <Dropdown.Item key={item._id} style={{ zIndex: 1000, display: "block", overflowY: 'auto' }} href="">
+                                                <Link to={`/details/${item._id}`}>
+                                                    {item && item.title}
+                                                </Link>
+                                            </Dropdown.Item>
+                                        ))}
+                                    </DropdownButton>
                                 </CardBody>
                                 <CardFooter className='project'>Project Details</CardFooter>
                             </Card>
@@ -70,7 +100,7 @@ const Home = ({ }) => {
                 </div>
             </Row>
             <div><CreateProject showModal={formVisibility} handleVisibility={handleVisibility} props={data} reloadPage={handleReloadPage} /></div>
-            <div><ProjectList showModal={listVisibility} handleVisibility={handleListVisibility} /></div>
+            <div><ProjectList showModal={listVisibility} handleVisibility={handleListVisibility} props={values} /></div>
         </>
     );
 }

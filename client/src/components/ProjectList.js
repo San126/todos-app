@@ -3,20 +3,8 @@ import { camelCase } from 'lodash';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
 
-const ProjectList = ({ showModal, handleVisibility }) => {
-    const [values, setValues] = useState([]);
-    const details = (localStorage.getItem('user'));
-    const [data, setData] = useState(JSON.parse(details));
-    const { username = "" } = data || {};
+const ProjectList = ({ showModal, handleVisibility, props }) => {
     let count = 0;
-
-    useEffect(() => {
-        // Fetch data from the server
-        fetch(`http://localhost:3001/auth/projectlist?userName=${username}`)
-            .then(response => response.json())
-            .then(data => setValues([...values, ...data]))
-            .catch(error => console.error('Error fetching data:', error));
-    }, [username]);
 
     const setVisibility = () => {
         console.log(showModal);
@@ -38,14 +26,13 @@ const ProjectList = ({ showModal, handleVisibility }) => {
                                 <th scope="col">Created At</th>
                             </tr>
                         </thead>
-                        {values.map((item) => (
-                            // (moment('YYYY-MM-DDTHH:mm:ss').isAfter(moment(classItem.scheduledTime, 'YYYY-MM-DDTHH:mm:ss'))) !== true ?
+                        {props?.map((item) => (
                             <tbody>
                                 <script>{count += 1}</script>
-                                <tr className='trow' index={item._id} data-toggle="modal">
+                                <tr className='trow' index={item?._id} data-toggle="modal">
                                     <td>{count}{' '}</td>
-                                    <td>{camelCase(item.title)}{' '}</td>
-                                    <td> {moment(item.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
+                                    <td>{camelCase(item?.title)}{' '}</td>
+                                    <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
                                 </tr>
                             </tbody>
                         ))

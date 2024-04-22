@@ -1,6 +1,6 @@
 const express = require('express');
+var ObjectId = require('mongodb').ObjectId;
 const router = express.Router();
-
 const { hash, compare } = require('bcryptjs');
 
 const { LoginModel, ProjectModel, TodoModel } = require('../models/Models');
@@ -60,7 +60,8 @@ router.get('/projectlist', async (req, res) => {
     const createdBy = req.query.userName;
     if (req.query) {
       const projectList = await ProjectModel.find({ createdBy });
-      return res.json(projectList);
+      console.log(projectList)
+      return res.status(201).json(projectList);
     }
     return res.status(500).json({
       message: 'You are not logged in! 😢',
@@ -95,6 +96,20 @@ router.post('/create', async (req, res) => {
 
     await newProject.save();
     res.status(201).json(newProject);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get('/details', async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const projectIdAsObjectId = new ObjectId(projectId);
+    console.log(projectIdAsObjectId)
+    const projectDetails = await ProjectModel.findOne({ _id: projectIdAsObjectId });
+    // if (projectDetails) {
+    res.status(201).json(projectDetails);
+    // }
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
