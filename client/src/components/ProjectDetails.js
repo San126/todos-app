@@ -6,10 +6,12 @@ import { Row, Col, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faTrash, faFileExport } from '@fortawesome/free-solid-svg-icons';
 
 import NavbarContents from './NavbarContents';
 import CreateTask from './CreateTask';
+
+const githubToken = process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN;
 
 const ProjectDetails = ({ props }) => {
     const [formVisibility, setFormVisibility] = useState();
@@ -21,6 +23,8 @@ const ProjectDetails = ({ props }) => {
     const [data, setData] = useState(JSON.parse(details));
     const [isEditing, setIsEditing] = useState(false);
     const [isTodoUpdated, setIsTodoUpdated] = useState(false);
+    const [gistUrl, setGistUrl] = useState(localStorage.getItem('gistUrl') || '');
+    const [error, setError] = useState(null);
     const { username: userName = "" } = data || {};
     let count = 0;
     const table = document.getElementById('todoTable');
@@ -34,7 +38,6 @@ const ProjectDetails = ({ props }) => {
                 setTodos([data.todoListDetails])))
             .catch(error => console.error('Error fetching data:', error));
     }, [projectId]);
-    console.log(values, todos)
 
     const handleReloadPage = () => {
         const details = (localStorage.getItem('user'));
@@ -59,7 +62,7 @@ const ProjectDetails = ({ props }) => {
                 confirmText: "Delete",
                 confirmColor: "primary",
                 cancelColor: "button",
-                cancelColor: "danger"
+                cancelColor: "dark"
             });
 
             if (result) {
@@ -84,7 +87,6 @@ const ProjectDetails = ({ props }) => {
                 const rowData = Array.from(cells).map(cell => cell.textContent);
 
                 const task = todos[0]?.forEach((element) => {
-                    console.log(rowData[1], rowData[2])
                     if (snakeCase(element.description) === snakeCase(rowData[1])) {
                         setTaskDetails({ ...element });
                     }
@@ -128,6 +130,53 @@ const ProjectDetails = ({ props }) => {
         }
     }
 
+    const handleFileExport = async () => {
+        const completedTodos = todos[0]?.filter((element) => element.status === "completed");
+        const totalTodos = todos[0].length || 0;
+        const pendingTasks = todos[0]?.filter((element) => element.status !== "completed");
+        try {
+
+            const response = await fetch('https://api.github.com/gists', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${githubToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    description: 'Project Summary Gist',
+                    public: true,
+                    files: {
+                        'todos-app.md': {
+                            content:
+                                `# ${startCase(values[0]?.title)}
+                        
+**Summary:** ${completedTodos.length}/${totalTodos} completed.
+                                                   
+## Pending Todos
+                           
+${pendingTasks?.map(task => `- [ ] ${task?.description}`)?.join('\n') || "None"}
+
+## Completed Todos
+                           
+${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
+                        }
+                    }
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setGistUrl(data.html_url);
+                localStorage.setItem('gistUrl', data.html_url);
+                setError(null);
+            } else {
+                throw new Error('Failed to create Gist');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    }
+
     return (
         <>
             <Row>
@@ -139,18 +188,24 @@ const ProjectDetails = ({ props }) => {
                             <p><h6>ProjectId: {projectId}</h6></p>
                         </Col>
                     </Row>
-                    <Row >
+                    <Row>
                         <Col md={3}></Col>
                         <Col md={5}>
-                            <Row>
+                            <Row className='header'>
                                 <h1><input className="input-border-none" type='projectTitle' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
                             </Row>
+                            <Row lassName='gist'>
+                                {gistUrl && <><h4>Gist Created:</h4> <p><a href={gistUrl} target="_blank" rel="noopener noreferrer">{gistUrl || localStorage.getItem('gistUrl')}</a></p></>}
+                                {error && <p>Error: {error}</p>}
+                            </Row>
                         </Col>
-                        <Col className="icon" md={1}><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} /></Col>
-                        <Col md={3}></Col>
+                        <Col className="icon" md={1}><Row><Col><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} styles={{ "padding-right": "10px" }} /></Col><Col><FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} /></Col></Row>
+                        </Col>
+                        <Col md={2}></Col>
                     </Row>
                     <Row className='todolist'>
-                        <Col md={3}></Col>
+                        <Col md={3}>
+                        </Col>
                         <Col md={5}>
                             <h3>Todos:</h3>
                         </Col>

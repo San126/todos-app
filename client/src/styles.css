@@ -226,8 +226,12 @@ svg path {
   align-items: center;
 }
 
+.header {
+  padding-bottom: 25px;
+}
+
 .todolist {
-  margin-top: 70px;
+  margin-top: 30px;
   padding: 10px;
   align-items: center;
 }

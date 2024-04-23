@@ -25,6 +25,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
             isToDosUpdated(true);
             handleVisibility(false);
             setValues([...values, response.data]);
+            localStorage.setItem('gistUrl', '');
             reloadPage();
             alert('Task created successfully');
             console.log('Task created successfully:', response.data);
