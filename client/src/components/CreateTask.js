@@ -36,7 +36,6 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
     };
 
     const setVisibility = () => {
-        console.log(showModal);
         handleVisibility(!showModal);
     }
 

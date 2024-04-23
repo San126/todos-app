@@ -27,7 +27,6 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
   };
 
   const setVisibility = () => {
-    console.log(showModal);
     handleVisibility(!showModal);
   }
 

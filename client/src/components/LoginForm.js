@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
@@ -9,7 +9,7 @@ import NavbarContents from './NavbarContents';
 const LoginForm = ({ sendData }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState(''); 
+    const [loginStatus, setLoginStatus] = useState('');
 
     const navigate = useNavigate();
 
@@ -25,7 +25,6 @@ const LoginForm = ({ sendData }) => {
             setLoginStatus('success');
             sendData(response.config.data);
             localStorage.setItem('user', response.config.data);
-            console.log(response.config.data)
             console.log('Logged in successfully:', response.config.data)
         }
         catch (error) {

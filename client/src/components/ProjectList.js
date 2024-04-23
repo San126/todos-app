@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { camelCase } from 'lodash';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
@@ -7,7 +7,6 @@ const ProjectList = ({ showModal, handleVisibility, props }) => {
     let count = 0;
 
     const setVisibility = () => {
-        console.log(showModal);
         handleVisibility(!showModal);
     }
 

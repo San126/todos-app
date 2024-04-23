@@ -3,6 +3,7 @@ import confirm from 'reactstrap-confirm';
 import { useParams } from 'react-router-dom';
 import { startCase, isEmpty, snakeCase } from 'lodash';
 import { Row, Col, Button } from 'react-bootstrap';
+import moment from 'moment';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,7 +61,7 @@ const ProjectDetails = ({ props }) => {
                 message: "Do you want to delete the task?",
                 size: "sm",
                 confirmText: "Delete",
-                confirmColor: "primary",
+                confirmColor: "danger",
                 cancelColor: "button",
                 cancelColor: "dark"
             });
@@ -199,7 +200,7 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
                                 {error && <p>Error: {error}</p>}
                             </Row>
                         </Col>
-                        <Col className="icon" md={1}><Row><Col><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} styles={{ "padding-right": "10px" }} /></Col><Col><FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} /></Col></Row>
+                        <Col className="icon" md={1}><Row><Col><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} styles={{ "padding-right": "10px" }} title="edit project title" /></Col><Col><FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} title="create project summary gist" /></Col></Row>
                         </Col>
                         <Col md={2}></Col>
                     </Row>
@@ -211,7 +212,7 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
                         </Col>
                         <Col md={1}>
                             <Button className='addIcon' onClick={handleVisibility}>
-                                <FontAwesomeIcon icon={faAdd} />
+                                <FontAwesomeIcon icon={faAdd} title="add new task" />
                             </Button>
                         </Col>
                         <Col md={3}></Col>
@@ -226,6 +227,8 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
                                             <th scope="col">#</th>
                                             <th scope="col">Description</th>
                                             <th scope="col">Status</th>
+                                            <th scope="col">Create At</th>
+                                            <th scope="col">Last Updated</th>
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
@@ -236,9 +239,11 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
                                                 <td>{count}{' '}</td>
                                                 <td>{startCase(item?.description)}{' '}</td>
                                                 <td>{startCase(item?.status)}{' '}</td>
+                                                <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
+                                                <td> {moment(item?.updatedAt).format('DD/MM/YYYY hh:mm A')}</td>
                                                 <td colSpan={2}>
-                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} />
-                                                    <FontAwesomeIcon icon={faTrash} onClick={() => deleteTask(item?.taskId)} />
+                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} title="edit task" />
+                                                    <FontAwesomeIcon icon={faTrash} onClick={() => deleteTask(item?.taskId)} title="remove task" />
                                                 </td>
                                             </tr>
                                         </tbody>
