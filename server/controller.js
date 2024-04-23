@@ -132,17 +132,10 @@ const getTodoList = async (todoIds) => {
 
 router.post('/createtask', async (req, res) => {
   try {
-    const { projectId = '', description = '', statusValue = '', createdBy = '' } = req.body;
+    const { projectId = '', description = '', statusValue = '', createdBy = '', taskId: todoId = '' } = req.body;
     const projectIdAsObjectId = new ObjectId(projectId);
     let todoTasks = [];
     const updatedAt = new Date();
-
-    const newTodo = new TodoModel({
-      updatedAt,
-      createdBy,
-      status: statusValue,
-      description
-    });
 
     if (projectIdAsObjectId) {
       let taskId = '';
@@ -150,7 +143,8 @@ router.post('/createtask', async (req, res) => {
       if (!isEmpty(projectDetails?.listOfTodos?.taskIds)) {
         todoTasks = projectDetails.listOfTodos.taskIds || [];
       }
-      const toDoDetails = await TodoModel.findOne({ description: snakeCase(description) });
+      const details = await TodoModel.findOne({ taskId: todoId });
+      const toDoDetails = details && details.toJSON();
 
       if (isEmpty(toDoDetails)) {
         taskId = await getNextSequenceValue('todos');
@@ -160,16 +154,46 @@ router.post('/createtask', async (req, res) => {
       taskIdsArray.push(taskId);
       projectDetails.listOfTodos.taskIds = taskIdsArray;
 
-      newTodo.taskId = toDoDetails?.taskId || taskId;
-      newTodo.createdAt = updatedAt;
-      
-      const projectUpdate = new ProjectModel(projectDetails);
+      const updatedData = {
+        ...toDoDetails,
+        updatedAt,
+        createdBy,
+        status: statusValue,
+        description
+      };
 
-      await newTodo.save();
+      updatedData.taskId = toDoDetails?.taskId || taskId;
+      updatedData.createdAt = updatedAt;
+
+      const options = {
+        new: true, // Return the updated document
+        upsert: true, // Insert if not exists, update if exists
+        setDefaultsOnInsert: true // Set default values when inserting new document
+      };
+
+      const projectUpdate = new ProjectModel(projectDetails);
+      const newTodo = await TodoModel.findOneAndUpdate(
+        { taskId: todoId },
+        updatedData,
+        options
+      );
+
       await projectUpdate.save();
 
       res.status(201).json({ message: "Task Updated Successfully", data: { newTodo, projectUpdate } });
     }
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.delete('/delete', async (req, res) => {
+  try {
+    const taskId = req.query.taskId;
+
+    const deletedTask = await TodoModel.findOneAndDelete({ taskId });
+
+    res.status(201).json({ message: `Task ${deletedTask} Deleted Successfully` });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }

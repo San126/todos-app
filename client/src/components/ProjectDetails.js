@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import confirm from 'reactstrap-confirm';
 import { useParams } from 'react-router-dom';
-import moment from 'moment';
-import { startCase, isEmpty } from 'lodash';
+import axios from 'axios';
+import { startCase, isEmpty, snakeCase } from 'lodash';
 import { Row, Col, Button } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,12 +16,14 @@ const ProjectDetails = ({ props }) => {
     const [listVisibility, setListVisibility] = useState();
     const [projectName, setProjectName] = useState('');
     const [newTodo, setNewTodo] = useState('');
-    const [todos, setTodos] = useState([]);
+    const [todos, setTodos] = useState({});
     const details = (localStorage.getItem('user'));
+    const [taskDetails, setTaskDetails] = useState({});
     const [values, setValues] = useState([]);
     const [data, setData] = useState(JSON.parse(details));
     const { username = "" } = data || {};
     let count = 0;
+    const table = document.getElementById('todoTable');
     const { projectId } = useParams();
 
     useEffect(() => {
@@ -43,9 +46,54 @@ const ProjectDetails = ({ props }) => {
         setFormVisibility(!formVisibility);
     };
 
-    const deleteTask = (taskId) => {
-        // setListVisibility(!listVisibility);
+    const deleteTask = async (taskId) => {
+        try {
+            let result = await confirm({
+                title: (
+                    <>
+                        <strong>Delete</strong>!
+                    </>
+                ),
+                message: "Do you want to delete the task?",
+                confirmText: "Confirm",
+                confirmColor: "primary",
+                cancelColor: "link text-danger"
+            });
+            if (result) {
+                await axios.delete(`http://localhost:3001/auth/delete?taskId=${taskId}`).then(
+                );
+                setValues(values.filter((post) => post.taskId !== taskId));
+                alert("Task deleted");
+            }
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        }
     }
+
+    table?.addEventListener('click', function (event) {
+        const cell = event.target;
+        const row = cell.closest('tr');
+
+        if (row) {
+            const cells = row.cells;
+            if (cells) {
+                const rowData = Array.from(cells).map(cell => cell.textContent);
+
+                const task = todos[0]?.forEach((element) => {
+                    console.log(rowData[1], rowData[2])
+                    if (snakeCase(element.description) === snakeCase(rowData[1])) {
+                        setTaskDetails({ ...element });
+                    }
+                });
+                console.log('Clicked row contents:', rowData, taskDetails);
+            } else {
+                console.log('No cells found in the row.');
+            }
+        } else {
+            console.log('No row found.');
+        }
+        // }
+    });
 
     const handleTodoAdd = () => {
         if (newTodo.trim() !== '') {
@@ -94,7 +142,7 @@ const ProjectDetails = ({ props }) => {
                         <Col md={2}></Col>
                         <Col md={8}>
                             {!isEmpty(todos[0]) ?
-                                <table className="table table-striped table-sm" id="dataTable" >
+                                <table className="table table-striped table-sm" id="todoTable" >
                                     <thead className='thead'>
                                         <tr className='thead'>
                                             <th scope="col">#</th>
@@ -112,7 +160,7 @@ const ProjectDetails = ({ props }) => {
                                                 <td>{startCase(item?.status)}{' '}</td>
                                                 <td colSpan={2}>
                                                     <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} />
-                                                    <FontAwesomeIcon icon={faTrash} onClick={() => { deleteTask(item?.taskId) }} />
+                                                    <FontAwesomeIcon icon={faTrash} onClick={() => deleteTask(item?.taskId)} />
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -141,7 +189,7 @@ const ProjectDetails = ({ props }) => {
                     <Col md={2}></Col>
                 </Row>
             </Row>
-            <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} /></div>
+            <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} taskDetails={taskDetails} /></div>
         </>
     );
 }
