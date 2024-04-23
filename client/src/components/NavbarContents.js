@@ -4,7 +4,7 @@ import { isEmpty } from "lodash";
 
 import axios from 'axios';
 
-const NavbarContents = ({ data, isEditing }) => {
+const NavbarContents = ({ data, isEditing, pathName = '' }) => {
   const navigate = useNavigate();
 
   const logOut = async (e) => {
@@ -43,11 +43,11 @@ const NavbarContents = ({ data, isEditing }) => {
                   <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
                 </svg>
               </DropdownToggle>
-              <DropdownMenu className='menu'>
+              {pathName !== "home" && <DropdownMenu className='menu'>
                 <div className="menuItem1" onClick={handleNavigation} >
                   Go to Home Page
                 </div>
-              </DropdownMenu>
+              </DropdownMenu>}
             </Dropdown>
           </span>}
           <span className='dropdown'>

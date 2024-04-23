@@ -17,6 +17,9 @@ const Home = ({ }) => {
     const [values, setValues] = useState();
     const [data, setData] = useState(JSON.parse(details));
     const { username = "" } = data || {};
+    const pathName = window.location.pathname;
+    const pathParts = pathName.split('/');
+    const currentPage = pathParts[pathParts.length -1];
 
     useEffect(() => {
         // Fetch data from the server
@@ -43,7 +46,7 @@ const Home = ({ }) => {
     return (
         <>
             <Row>
-                <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} />
+                <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} pathName={currentPage} />
                 <div className="home">
                     <Row>
                         <p className="welcome"><h3>Welcome {upperFirst(username?.split('@')[0])}</h3></p>
