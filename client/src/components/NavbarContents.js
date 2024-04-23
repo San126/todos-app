@@ -1,12 +1,10 @@
-import { useState } from "react";
 import { Dropdown, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { isEmpty } from "lodash";
 
 import axios from 'axios';
 
-const NavbarContents = ({ visibility, reloadPage, data }) => {
-  const [formVisibility, setFormVisibility] = useState(visibility || false);
+const NavbarContents = ({ data, isEditing }) => {
   const navigate = useNavigate();
 
   const logOut = async (e) => {
@@ -23,9 +21,11 @@ const NavbarContents = ({ visibility, reloadPage, data }) => {
     }
   }
 
-  const handleVisibility = () => {
-    setFormVisibility(!formVisibility);
-  };
+  const handleNavigation = () => {
+    if (isEditing && window.confirm('You have unsaved changes. Are you sure you want to leave?') || !isEditing) {
+      navigate('/home');
+    }
+  }
 
   return (
     <>
@@ -44,8 +44,8 @@ const NavbarContents = ({ visibility, reloadPage, data }) => {
                 </svg>
               </DropdownToggle>
               <DropdownMenu className='menu'>
-                <div className="menuItem1" onClick={handleVisibility} >
-                  Projects
+                <div className="menuItem1" onClick={handleNavigation} >
+                  Go to Home Page
                 </div>
               </DropdownMenu>
             </Dropdown>

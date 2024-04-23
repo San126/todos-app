@@ -16,6 +16,7 @@ router.post('/signup', async (req, res) => {
   try {
     const { username: userName = "", password = "" } = req.body;
     const userDetails = await LoginModel.findOne({ userName });
+
     if (userDetails) {
       return res.status(500).json({
         message: "User already exists. Try login",
@@ -24,7 +25,6 @@ router.post('/signup', async (req, res) => {
     }
 
     const passwordHash = await hash(password, 10);
-
     const newSignup = new LoginModel({
       userName,
       password: passwordHash
@@ -40,13 +40,13 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
   const { username: userName, password } = req.body;
   const userDetails = await LoginModel.findOne({ userName });
+
   if (userDetails) {
     const isMatch = await compare(password, userDetails.password);
-    console.log("match", isMatch)
+
     if (!isMatch) {
       return res.status(500).json({ message: "Password incorrect", userDetails });
     }
-
     userDetails.verified = isMatch;
     await userDetails.save();
 
@@ -60,11 +60,13 @@ router.post('/login', async (req, res) => {
 router.get('/projectlist', async (req, res) => {
   try {
     const createdBy = req.query.userName;
+
     if (req.query) {
       const projectList = await ProjectModel.find({ createdBy });
       console.log(projectList)
       return res.status(201).json(projectList);
     }
+
     return res.status(500).json({
       message: 'You are not logged in! 😢',
       type: 'error',
@@ -77,27 +79,45 @@ router.get('/projectlist', async (req, res) => {
 
 router.post('/create', async (req, res) => {
   try {
-    const { createdBy, title } = req.body;
+    const { createdBy, title, action = 'create', updatedTitle = '' } = req.body;
+    let projectId = '';
     const createdAt = new Date();
-    const projectDetails = await ProjectModel.findOne({ title });
-    if (projectDetails) {
+    const details = await ProjectModel.findOne({ title: snakeCase(title) });
+    const projectDetails = details && details.toJSON();
+
+    if (projectDetails && action === "create") {
       return res.status(500).json({
         message: "Project name already exists",
         type: 'warning'
       });
     }
+    else if (projectDetails) {
+      projectId = projectDetails.projectId;
+    }
+    else {
+      projectId = await getNextSequenceValue('projects');
+    }
 
-    const projectId = await getNextSequenceValue('projects');
+    const options = {
+      new: true, // Return the updated document
+      upsert: true, // Insert if not exists, update if exists
+      setDefaultsOnInsert: true // Set default values when inserting new document
+    };
 
-    const newProject = new ProjectModel({
-      projectId,
+    const updatedData = {
+      ...projectDetails,
       createdAt,
       createdBy,
-      title
-    });
+      title: updatedTitle ? snakeCase(updatedTitle) : snakeCase(title)
+    }
 
-    await newProject.save();
-    res.status(201).json(newProject);
+    const newProject = await ProjectModel.findOneAndUpdate(
+      { projectId },
+      updatedData,
+      options
+    );
+
+    res.status(201).json({ message: "Project Updated Successfully", data: { newProject } });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
@@ -153,7 +173,6 @@ router.post('/createtask', async (req, res) => {
       const taskIdsArray = projectDetails?.listOfTodos?.taskIds ?? [];
       taskIdsArray.push(taskId);
       projectDetails.listOfTodos.taskIds = taskIdsArray;
-
       const updatedData = {
         ...toDoDetails,
         updatedAt,
@@ -161,10 +180,8 @@ router.post('/createtask', async (req, res) => {
         status: statusValue,
         description
       };
-
       updatedData.taskId = toDoDetails?.taskId || taskId;
       updatedData.createdAt = updatedAt;
-
       const options = {
         new: true, // Return the updated document
         upsert: true, // Insert if not exists, update if exists
@@ -190,7 +207,6 @@ router.post('/createtask', async (req, res) => {
 router.delete('/delete', async (req, res) => {
   try {
     const taskId = req.query.taskId;
-
     const deletedTask = await TodoModel.findOneAndDelete({ taskId });
 
     res.status(201).json({ message: `Task ${deletedTask} Deleted Successfully` });

@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import confirm from 'reactstrap-confirm';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 import { startCase, isEmpty, snakeCase } from 'lodash';
 import { Row, Col, Button } from 'react-bootstrap';
+import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faEdit, faEye, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 import NavbarContents from './NavbarContents';
 import CreateTask from './CreateTask';
 
 const ProjectDetails = ({ props }) => {
     const [formVisibility, setFormVisibility] = useState();
-    const [listVisibility, setListVisibility] = useState();
     const [projectName, setProjectName] = useState('');
-    const [newTodo, setNewTodo] = useState('');
     const [todos, setTodos] = useState({});
     const details = (localStorage.getItem('user'));
     const [taskDetails, setTaskDetails] = useState({});
     const [values, setValues] = useState([]);
     const [data, setData] = useState(JSON.parse(details));
-    const { username = "" } = data || {};
+    const [isEditing, setIsEditing] = useState(false);
+    const [isTodoUpdated, setIsTodoUpdated] = useState(false);
+    const { username: userName = "" } = data || {};
     let count = 0;
     const table = document.getElementById('todoTable');
     const { projectId } = useParams();
@@ -55,15 +55,19 @@ const ProjectDetails = ({ props }) => {
                     </>
                 ),
                 message: "Do you want to delete the task?",
-                confirmText: "Confirm",
+                size: "sm",
+                confirmText: "Delete",
                 confirmColor: "primary",
-                cancelColor: "link text-danger"
+                cancelColor: "button",
+                cancelColor: "danger"
             });
+
             if (result) {
                 await axios.delete(`http://localhost:3001/auth/delete?taskId=${taskId}`).then(
                 );
                 setValues(values.filter((post) => post.taskId !== taskId));
                 alert("Task deleted");
+                handleReloadPage();
             }
         } catch (error) {
             console.error("Error deleting task:", error);
@@ -92,24 +96,44 @@ const ProjectDetails = ({ props }) => {
         } else {
             console.log('No row found.');
         }
-        // }
     });
 
-    const handleTodoAdd = () => {
-        if (newTodo.trim() !== '') {
-            setTodos([...todos, { id: todos.length + 1, description: newTodo }]);
-            setNewTodo(''); // Clear input field after adding todo
-        }
+    const handleEditToggle = () => {
+        setIsEditing(true);
     };
 
+    const isToDosUpdated = (currentStatus) => {
+        setIsTodoUpdated(currentStatus);
+    }
+
+    const saveProjectUpdates = async () => {
+        try {
+            if (isEditing) {
+                const response = await axios.post('http://localhost:3001/auth/create', {
+                    createdBy: userName,
+                    title: values[0]?.title,
+                    updatedTitle: projectName,
+                    action: "update"
+                });
+                window.location.reload();
+                alert('Project updated successfully');
+                console.log('Project updated successfully:', response.data);
+            }
+            else {
+                alert("No Changes to Save");
+            }
+        } catch (error) {
+            alert(error.response?.data?.message);
+            console.error('Error updating project:', error);
+        }
+    }
 
     return (
         <>
             <Row>
-                <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} />
+                <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} isEditing={isEditing} />
 
                 <div className="details">
-                    {/* <Col md={4}></Col> */}
                     <Row>
                         <Col>
                             <p><h6>ProjectId: {projectId}</h6></p>
@@ -119,11 +143,10 @@ const ProjectDetails = ({ props }) => {
                         <Col md={3}></Col>
                         <Col md={5}>
                             <Row>
-                                <h1><input className="input-border-none" type='projectTitle' value={projectName || values[0]?.title} onChange={(e) => setProjectName(e.target.value)} /></h1>
+                                <h1><input className="input-border-none" type='projectTitle' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
                             </Row>
-                            {/* </Col> */}
                         </Col>
-                        <Col className="icon" md={1}><FontAwesomeIcon icon={faEdit} /></Col>
+                        <Col className="icon" md={1}><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} /></Col>
                         <Col md={3}></Col>
                     </Row>
                     <Row className='todolist'>
@@ -159,7 +182,7 @@ const ProjectDetails = ({ props }) => {
                                                 <td>{startCase(item?.description)}{' '}</td>
                                                 <td>{startCase(item?.status)}{' '}</td>
                                                 <td colSpan={2}>
-                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} />
+                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} />
                                                     <FontAwesomeIcon icon={faTrash} onClick={() => deleteTask(item?.taskId)} />
                                                 </td>
                                             </tr>
@@ -178,18 +201,17 @@ const ProjectDetails = ({ props }) => {
                         </Col>
                         <Col md={2}></Col>
                     </Row>
-                    {/* <Col md={4}></Col> */}
                 </div>
                 <Row>
                     <Col md={6}></Col>
-                    <Col md={3}></Col>
-                    <Col md={2}>
-                        <span><button type="button" className="btn btn-primary">Save Changes</button></span>
-                    </Col>
                     <Col md={2}></Col>
+                    <Col md={2}>
+                        <span><button type="button" className="btn btn-primary" onClick={saveProjectUpdates}>Save Changes</button></span>
+                    </Col>
+                    <Col md={3}></Col>
                 </Row>
             </Row>
-            <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} taskDetails={taskDetails} /></div>
+            <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} taskDetails={taskDetails} isToDosUpdated={isToDosUpdated} /></div>
         </>
     );
 }

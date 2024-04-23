@@ -3,30 +3,18 @@ import axios from 'axios';
 import { Modal, Form } from 'react-bootstrap';
 
 import '../styles.css';
-import { camelCase, snakeCase } from 'lodash';
 
-const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDetails, taskDetails }) => {
+const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDetails, taskDetails, isToDosUpdated }) => {
     const { status = '', description = '', taskId: todoId = '' } = taskDetails || {};
     const [statusValue, setStatusValue] = useState('');
     const [task, setTask] = useState('');
-    const [taskId, setTaskId] = useState('');
     const [values, setValues] = useState([]);
     const details = projectDetails[0];
-    console.log(details)
     const { username: userName = "" } = props || {};
     const { title = "", _id: projectId = "" } = details || {};
-    console.log(taskDetails)
-    // const { taskId = "" } = taskDetails;
 
-    const createNewTask = async () => {
+    const createAndUpdateTask = async () => {
         try {
-            // let url =``;
-            //             if(taskId){
-            // url = http://localhost:3001/auth/createtask
-            //             }
-            //             else{
-
-            //             }
             const response = await axios.post('http://localhost:3001/auth/createtask', {
                 projectId,
                 taskId: todoId,
@@ -34,6 +22,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
                 statusValue: statusValue || status,
                 createdBy: userName
             });
+            isToDosUpdated(true);
             handleVisibility(false);
             setValues([...values, response.data]);
             reloadPage();
@@ -50,10 +39,6 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
         handleVisibility(!showModal);
     }
 
-    const handleStatusChange = (e) => {
-        setStatusValue(e.target.value);
-    }
-
     return (
         <Modal show={showModal} onHide={setVisibility} size='sm'>
             <Modal.Header className='modalHeader' closeButton>
@@ -67,7 +52,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
                     </div>
                     <div className="form-group">
                         <label htmlFor="title">Description</label>
-                        <input type="title" value={task || taskDetails?.description} className="form-control" id="description" placeholder={'Enter task description'} onChange={(e) => setTask(e.target.value)} />
+                        <input type="email" value={task || taskDetails?.description} className="form-control" id="description" placeholder={'Enter task description'} onChange={(e) => setTask(e.target.value)} />
                     </div>
                     <div className="form-group">
                         <label htmlFor="select">Status</label>
@@ -85,7 +70,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
                     </div>
                 </Form>
                 <Modal.Footer className='modalFooter'>
-                    <span><button type="button" className="btn btn-primary" onClick={createNewTask}>Create</button></span>
+                    <span><button type="button" className="btn btn-primary" onClick={createAndUpdateTask}>{todoId ? "Update" : "Create"}</button></span>
                     <span><button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Cancel</button></span>
                 </Modal.Footer>
             </Modal.Body>
