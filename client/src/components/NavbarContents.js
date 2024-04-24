@@ -14,6 +14,7 @@ const NavbarContents = ({ data, isEditing, pathName = '' }) => {
         .then(() => {
           navigate('/');
           alert("Logged out...");
+          localStorage.setItem('loginStatus', JSON.stringify(false));
         });
     }
     catch (err) {

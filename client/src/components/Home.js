@@ -19,13 +19,14 @@ const Home = ({ }) => {
     const { username = "" } = data || {};
     const pathName = window.location.pathname;
     const pathParts = pathName.split('/');
-    const currentPage = pathParts[pathParts.length -1];
+    const currentPage = pathParts[pathParts.length - 1];
 
     useEffect(() => {
         // Fetch data from the server
         fetch(`http://localhost:3001/auth/projectlist?userName=${username}`)
             .then(response => response.json())
             .then(data => setValues([...data]))
+            .then(localStorage.setItem('loginStatus', JSON.stringify(true)))
             .catch(error => console.error('Error fetching data:', error));
     }, [username]);
 
@@ -76,13 +77,19 @@ const Home = ({ }) => {
                             <Card className='project'>
                                 <CardBody>
                                     <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon icon={faFolderOpen} title='project details' />}>
-                                        {values && values.map((item) => (
+                                        {values ? values?.map((item) => (
                                             <Dropdown.Item key={item._id} style={{ zIndex: 1000, display: "block", overflowY: 'auto' }} href="">
                                                 <Link to={`/details/${item._id}`}>
                                                     {item && item.title}
                                                 </Link>
                                             </Dropdown.Item>
-                                        ))}
+                                        )) :
+                                            <Dropdown.Item key={0}>
+                                                {/* <div className="alert alert-warning" role="alert"> */}
+                                                    No Projects Found!
+                                                {/* </div> */}
+                                            </Dropdown.Item>
+                                        }
                                     </DropdownButton>
                                 </CardBody>
                                 <CardFooter className='project'>Project Details</CardFooter>

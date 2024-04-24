@@ -63,7 +63,6 @@ router.get('/projectlist', async (req, res) => {
 
     if (req.query) {
       const projectList = await ProjectModel.find({ createdBy });
-      console.log(projectList)
       return res.status(201).json(projectList);
     }
 

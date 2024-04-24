@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 import LoginForm from './components/LoginForm';
 import Signup from './components/Signup';
@@ -11,6 +11,7 @@ import './styles.css';
 const App = () => {
   const [formVisibility, setFormVisibility] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const isLoggedIn = JSON.parse(localStorage.getItem('loginStatus')) || false;
 
   const setDetails = () => {
     const data = (localStorage.getItem('user'));
@@ -22,9 +23,21 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginForm sendData={setDetails} />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/home" element={<Home props={userDetails} showModal={formVisibility} />} />
-        <Route path="/details/:projectId" element={<ProjectDetails props={userDetails} />} />
       </Routes>
+      {isLoggedIn === true ?
+        <Routes>
+          <>
+            <Route path="/home" element={<Home props={userDetails} showModal={formVisibility} />} />
+            <Route path="/details/:projectId" element={<ProjectDetails props={userDetails} />} />
+          </>
+        </Routes> : <>{!['/', '/signup'].includes(window.location.pathname) ?
+          <>{
+            alert("User not logged in!")
+          }
+            <Navigate to="/"></Navigate></>
+          : <></>}
+        </>}
+
     </Router>
   );
 };

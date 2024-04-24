@@ -25,6 +25,7 @@ const LoginForm = ({ sendData }) => {
             setLoginStatus('success');
             sendData(response.config.data);
             localStorage.setItem('user', response.config.data);
+            localStorage.setItem('loginStatus', JSON.stringify(true));
             console.log('Logged in successfully:', response.config.data)
         }
         catch (error) {

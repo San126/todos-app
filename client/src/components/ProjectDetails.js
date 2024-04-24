@@ -251,12 +251,9 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
                                     }
                                 </table>
                                 :
-                                !isEmpty(todos) ?
-                                    <></>
-                                    :
-                                    <div className="alert alert-warning" role="alert">
-                                        No tasks found!
-                                    </div>
+                                <div className="alert alert-warning" role="alert">
+                                    No tasks found!
+                                </div>
                             }
                         </Col>
                         <Col md={2}></Col>
