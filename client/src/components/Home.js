@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { upperFirst } from 'lodash';
+import { startCase, upperFirst } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Row, Col, Button, Card, CardBody, CardFooter, Dropdown, DropdownButton, DropdownItem } from 'react-bootstrap';
 
@@ -77,18 +77,15 @@ const Home = ({ }) => {
                             <Card className='project'>
                                 <CardBody>
                                     <DropdownButton id="dropdown-basic-button" title={<FontAwesomeIcon icon={faFolderOpen} title='project details' />}>
-                                        {values ? values?.map((item) => (
-                                            <Dropdown.Item key={item._id} style={{ zIndex: 1000, display: "block", overflowY: 'auto' }} href="">
-                                                <Link to={`/details/${item._id}`}>
-                                                    {item && item.title}
+                                        {values && values.length > 0 ? 
+                                        values?.map((item) => (
+                                            <Dropdown.Item key={item._id} href="">
+                                                <Link className='projectTitles' to={`/details/${item._id}`}>
+                                                    {item && startCase(item.title)}
                                                 </Link>
                                             </Dropdown.Item>
                                         )) :
-                                            <Dropdown.Item key={0}>
-                                                {/* <div className="alert alert-warning" role="alert"> */}
-                                                    No Projects Found!
-                                                {/* </div> */}
-                                            </Dropdown.Item>
+                                            (<Dropdown.Item disabled>No Projects Found!</Dropdown.Item>)
                                         }
                                     </DropdownButton>
                                 </CardBody>
