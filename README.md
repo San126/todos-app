@@ -45,4 +45,22 @@ give proper permission and create access token and copy the value
 - Now got to the client sub directory create file `.env` paste the value with lable tsarting in **REACT_APP_** then save the value like
 `REACT_APP_GITHUB_PERSONAL_TOKEN=personal_token_value_copid_now`
 
+---
+
+- The back-end is done in MongoDB. To work on the same 
+1. Go to https://www.mongodb.com/try/download/compass
+
+2. Go to **MongoDB Compass Download (GUI)**
+
+3. Then download the package and run
+
+4. Once you initialize the back-end from the editor(eg: vs code) the database and schemas will get created.
+
+
+``` 
+The MongoDB connection string for a local server would typically take the form of mongodb://localhost:27017/<database> , where <database> is the name of the database that we want to connect to here it is "todos-app". If you are using a different port for MongoDB, you should replace 27017 with the port number you are using and update the same in the file server/index.js 
+
+mongoose.connect('mongodb://localhost:27017/todos-app)  
+```
+
 Now the setups are done you can work on the app demo
