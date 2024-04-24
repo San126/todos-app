@@ -160,7 +160,7 @@ ${pendingTasks?.map(task => `- [ ] ${task?.description}`)?.join('\n') || "None"}
 
 ## Completed Todos
                            
-${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
+${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"}`
                             }
                         }
                     })
