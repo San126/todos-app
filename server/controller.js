@@ -205,10 +205,35 @@ router.post('/createtask', async (req, res) => {
 
 router.delete('/delete', async (req, res) => {
   try {
-    const taskId = req.query.taskId;
-    const deletedTask = await TodoModel.findOneAndDelete({ taskId });
+    const taskId = [req.query.taskId];
+    const deletedTask = deleteTask(taskId);
 
     res.status(201).json({ message: `Task ${deletedTask} Deleted Successfully` });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+const deleteTask = async (taskIds) => {
+  try {
+    const deletedTask = await TodoModel.deleteMany({ taskId: { $in: [...taskIds] } });
+    return deletedTask;
+  } catch (error) {
+    console.error(error);
+    return ({ error: 'Internal Server Error' });
+  }
+}
+
+router.delete('/deleteproject', async (req, res) => {
+  try {
+    const projectId = req.query.projectId;
+    const todoIdsString = req.query.todoIds;
+    const todoIds = todoIdsString.split(',');
+
+    const deletedProject = await ProjectModel.findOneAndDelete({ projectId }, { new: true });
+    await deleteTask(todoIds);
+
+    res.status(201).json({ message: `Project ${deletedProject} Deleted Successfully`, deletedProject });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }

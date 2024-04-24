@@ -96,7 +96,7 @@ const Home = ({ }) => {
                 </div>
             </Row>
             <div><CreateProject showModal={formVisibility} handleVisibility={handleVisibility} props={data} reloadPage={handleReloadPage} /></div>
-            <div><ProjectList showModal={listVisibility} handleVisibility={handleListVisibility} props={values} /></div>
+            <div><ProjectList showModal={listVisibility} handleVisibility={handleListVisibility} props={values} reloadPage={handleReloadPage}/></div>
         </>
     );
 }

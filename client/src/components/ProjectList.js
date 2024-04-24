@@ -2,12 +2,33 @@ import React from 'react';
 import { camelCase } from 'lodash';
 import { Modal } from 'react-bootstrap';
 import moment from 'moment';
+import axios from 'axios';
 
-const ProjectList = ({ showModal, handleVisibility, props }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
+
+const ProjectList = ({ showModal, handleVisibility, props, reloadPage }) => {
     let count = 0;
+    const [values, setValues] = ([props]);
 
     const setVisibility = () => {
         handleVisibility(!showModal);
+    }
+
+    const confirmDelete = async (projectId, listOfTodos) => {
+        try {
+            const confirmed = window.confirm("Are you sure you want to delete this item?");
+            const todoIds = listOfTodos?.taskIds || [];
+            if (confirmed) {
+                const response = await axios.delete(`http://localhost:3001/auth/deleteproject?projectId=${projectId}&&todoIds=${[...todoIds]}`);
+                if (response) {
+                    reloadPage();
+                    alert("Project deleted");
+                }
+            }
+        } catch (error) {
+            console.error("Error deleting task:", error);
+        }
     }
 
     return (
@@ -23,15 +44,19 @@ const ProjectList = ({ showModal, handleVisibility, props }) => {
                                 <th scope="col">#</th>
                                 <th scope="col">Project Title</th>
                                 <th scope="col">Created At</th>
+                                <th scope="col">Actions</th>
                             </tr>
                         </thead>
-                        {props?.map((item) => (
+                        {values?.map((item) => (
                             <tbody>
                                 <script>{count += 1}</script>
                                 <tr className='trow' index={item?._id} data-toggle="modal">
                                     <td>{count}{' '}</td>
                                     <td>{camelCase(item?.title)}{' '}</td>
                                     <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
+                                    <td colSpan={2}>
+                                        <FontAwesomeIcon icon={faTrash} onClick={() => confirmDelete(item?.projectId, item?.listOfTodos)} title="remove task" />
+                                    </td>
                                 </tr>
                             </tbody>
                         ))
