@@ -230,6 +230,11 @@ svg path {
   padding-bottom: 25px;
 }
 
+.project .projectTitles{
+  text-decoration: none;
+  color: black;
+}
+
 .todolist {
   margin-top: 30px;
   padding: 10px;

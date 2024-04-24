@@ -13,6 +13,11 @@ const App = () => {
   const [userDetails, setUserDetails] = useState({});
   const isLoggedIn = JSON.parse(localStorage.getItem('loginStatus')) || false;
 
+  window.history.pushState(null, null, window.location.href);
+  window.onpopstate = function (event) {
+    window.history.go(1);
+  };
+
   const setDetails = () => {
     const data = (localStorage.getItem('user'));
     setUserDetails(JSON.parse(data));

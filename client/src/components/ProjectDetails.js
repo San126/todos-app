@@ -136,20 +136,21 @@ const ProjectDetails = ({ props }) => {
         const totalTodos = todos[0].length || 0;
         const pendingTasks = todos[0]?.filter((element) => element.status !== "completed");
         try {
+            if (totalTodos > 0) {
 
-            const response = await fetch('https://api.github.com/gists', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${githubToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    description: 'Project Summary Gist',
-                    public: true,
-                    files: {
-                        'todos-app.md': {
-                            content:
-                                `# ${startCase(values[0]?.title)}
+                const response = await fetch('https://api.github.com/gists', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${githubToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        description: 'Project Summary Gist',
+                        public: true,
+                        files: {
+                            'todos-app.md': {
+                                content:
+                                    `# ${startCase(values[0]?.title)}
                         
 **Summary:** ${completedTodos.length}/${totalTodos} completed.
                                                    
@@ -159,19 +160,24 @@ ${pendingTasks?.map(task => `- [ ] ${task?.description}`)?.join('\n') || "None"}
 
 ## Completed Todos
                            
-${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n')}`
+${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"}`
+                            }
                         }
-                    }
-                })
-            });
+                    })
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                setGistUrl(data.html_url);
-                localStorage.setItem('gistUrl', data.html_url);
-                setError(null);
-            } else {
-                throw new Error('Failed to create Gist');
+                if (response.ok) {
+                    const data = await response.json();
+                    setGistUrl(data.html_url);
+                    localStorage.setItem('gistUrl', data.html_url);
+                    setError(null);
+                }
+                else {
+                    throw new Error('Failed to create Gist');
+                }
+            }
+            else {
+                alert("No todos created. Please create todos and generate gist")
             }
         } catch (error) {
             setError(error.message);
