@@ -5,6 +5,7 @@ import { isEmpty } from "lodash";
 import axios from 'axios';
 
 const NavbarContents = ({ data, isEditing, pathName = '' }) => {
+  const delayInMilliseconds = 45 * 60 * 1000;
   const navigate = useNavigate();
 
   const logOut = async (e) => {
@@ -21,6 +22,13 @@ const NavbarContents = ({ data, isEditing, pathName = '' }) => {
       console.error('Error while login', err);
     }
   }
+
+  setTimeout(() => {
+    logOut();
+    navigate('/');
+    alert('Time out');
+    console.log('localStorage cleared');
+  }, delayInMilliseconds);
 
   const handleNavigation = () => {
     if (isEditing && window.confirm('You have unsaved changes. Are you sure you want to leave?') || !isEditing) {
