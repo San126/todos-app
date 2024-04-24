@@ -235,6 +235,11 @@ svg path {
   color: black;
 }
 
+.menu .planeLink{
+  text-decoration: none !important;
+  color: white !important;
+}
+
 .todolist {
   margin-top: 30px;
   padding: 10px;
@@ -436,8 +441,15 @@ div .link {
   padding: 35px;
 }
 
-.link a {
+.loginlink {
+display: inline;
+}
+
+.link a, .loginlink > a {
   color: rgb(208, 204, 204);
+  text-decoration: none;
+  text-align: center;
+  justify-content: center;
 }
 
 .signup a:hover {

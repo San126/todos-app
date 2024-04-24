@@ -1,26 +1,39 @@
 import { Dropdown, DropdownMenu, DropdownToggle } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { isEmpty } from "lodash";
 
 import axios from 'axios';
 
+import '../styles.css';
+
 const NavbarContents = ({ data, isEditing, pathName = '' }) => {
+  const delayInMilliseconds = 45 * 60 * 1000;
   const navigate = useNavigate();
 
   const logOut = async (e) => {
     try {
       e.preventDefault();
       const response = await axios.post('http://localhost:3001/auth/logout', {})
-        .then(() => {
-          navigate('/');
-          alert("Logged out...");
-          localStorage.clear();
-        });
+        .then(
+          alert("Logged out..."))
+        .then(() =>
+          navigate('/'))
+        .then(localStorage.clear()
+        )
     }
     catch (err) {
       console.error('Error while login', err);
     }
   }
+
+  setTimeout(() => {
+    if (window.location.pathname !== '/') {
+      logOut();
+      navigate('/');
+      alert('Time out');
+      console.log('localStorage cleared');
+    }
+  }, delayInMilliseconds);
 
   const handleNavigation = () => {
     if (isEditing && window.confirm('You have unsaved changes. Are you sure you want to leave?') || !isEditing) {
@@ -64,9 +77,12 @@ const NavbarContents = ({ data, isEditing, pathName = '' }) => {
                 </svg>
               </DropdownToggle>
               <DropdownMenu className='menu'>
-                <div className="menuItem2" onClick={logOut}>
-                  Logout
-                </div>
+                {!['/', '/signup'].includes(window.location.pathname) ?
+                  <div className="menuItem2" onClick={logOut}>
+                    Logout
+                  </div> :
+                  <div className='loginlink' ><a href="./" >Login</a></div>
+                }
               </DropdownMenu>
             </Dropdown>
           </span>
