@@ -135,6 +135,8 @@ const ProjectDetails = ({ props }) => {
         const completedTodos = todos[0]?.filter((element) => element.status === "completed");
         const totalTodos = todos[0].length || 0;
         const pendingTasks = todos[0]?.filter((element) => element.status !== "completed");
+        const fileName = snakeCase(values[0]?.title) + ".md";
+
         try {
             if (totalTodos > 0) {
 
@@ -148,7 +150,7 @@ const ProjectDetails = ({ props }) => {
                         description: 'Project Summary Gist',
                         public: true,
                         files: {
-                            'todos-app.md': {
+                            [fileName]: {
                                 content:
                                     `# ${startCase(values[0]?.title)}
                         
