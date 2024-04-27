@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Form } from 'react-bootstrap';
 
-import '../styles.css';
-
 const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
   const [title, setTitle] = useState('');
   const [values, setValues] = useState([]);
@@ -31,7 +29,7 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
   }
 
   return (
-    <Modal show={showModal} onHide={setVisibility} size='sm'>
+    <Modal show={showModal} onHide={setVisibility} size='md'>
       <Modal.Header className='modalHeader' closeButton>
         <Modal.Title className='modalTitle'>New Project</Modal.Title>
       </Modal.Header>

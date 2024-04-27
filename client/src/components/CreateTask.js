@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Modal, Form } from 'react-bootstrap';
 
-import '../styles.css';
-
 const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDetails, taskDetails, isToDosUpdated }) => {
     const { status = '', description = '', taskId: todoId = '' } = taskDetails || {};
     const [statusValue, setStatusValue] = useState('');
@@ -40,7 +38,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
     }
 
     return (
-        <Modal show={showModal} onHide={setVisibility} size='sm'>
+        <Modal className='createmodal' show={showModal} onHide={setVisibility} size="md" >
             <Modal.Header className='modalHeader' closeButton>
                 <Modal.Title className='modalTitle'>New Project</Modal.Title>
             </Modal.Header>
@@ -70,7 +68,7 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
                     </div>
                 </Form>
                 <Modal.Footer className='modalFooter'>
-                    <span><button type="button" className="btn btn-primary" onClick={createAndUpdateTask}>{todoId ? "Update" : "Create"}</button></span>
+                    <span><button type="button" className="btn btn-primary" onClick={createAndUpdateTask} >{todoId ? "Update" : "Create"}</button></span>
                     <span><button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={setVisibility}>Cancel</button></span>
                 </Modal.Footer>
             </Modal.Body>

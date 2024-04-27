@@ -192,7 +192,7 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                 <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} isEditing={isEditing} />
 
                 <div className="details">
-                    <Row>
+                    <Row className='projectId'>
                         <Col>
                             <p><h6>ProjectId: {projectId}</h6></p>
                         </Col>
@@ -201,14 +201,22 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         <Col md={3}></Col>
                         <Col md={5}>
                             <Row className='header'>
-                                <h1><input className="input-border-none" type='projectTitle' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
+                                <h1><input className="input-border-none" type='text' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
                             </Row>
-                            <Row lassName='gist'>
-                                {gistUrl && <><h4>Gist Created:</h4> <p><a href={gistUrl} target="_blank" rel="noopener noreferrer">{gistUrl || localStorage.getItem('gistUrl')}</a></p></>}
+                            {gistUrl && <Row className='gist'>
+                                 <><h4>Gist Created:</h4> <p><a href={gistUrl} target="_blank" rel="noopener noreferrer">{gistUrl || localStorage.getItem('gistUrl')}</a></p></>
                                 {error && <p>Error: {error}</p>}
-                            </Row>
+                            </Row>}
                         </Col>
-                        <Col className="icon" md={1}><Row><Col><FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} styles={{ "padding-right": "10px" }} title="edit project title" /></Col><Col><FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} title="create project summary gist" /></Col></Row>
+                        <Col md={1}>
+                            <Row className='projectActions'>
+                                <Col className="editIcon" >
+                                    <FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} title="edit project title" />
+                                </Col>
+                                <Col className="createGist" >
+                                    <FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} title="create project summary gist" />
+                                </Col>
+                            </Row>
                         </Col>
                         <Col md={2}></Col>
                     </Row>
@@ -250,8 +258,8 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                                                 <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
                                                 <td> {moment(item?.updatedAt).format('DD/MM/YYYY hh:mm A')}</td>
                                                 <td colSpan={2}>
-                                                    <FontAwesomeIcon icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} title="edit task" />
-                                                    <FontAwesomeIcon icon={faTrash} onClick={() => deleteTask(item?.taskId)} title="remove task" />
+                                                    <FontAwesomeIcon className="tableEditIcon" icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} title="edit task" />
+                                                    <FontAwesomeIcon className="tableDeleteIcon" icon={faTrash} onClick={() => deleteTask(item?.taskId)} title="remove task" />
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -267,13 +275,11 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         <Col md={2}></Col>
                     </Row>
                 </div>
-                <Row>
-                    <Col md={6}></Col>
-                    <Col md={2}></Col>
-                    <Col md={2}>
-                        <span><button type="button" className="btn btn-primary" onClick={saveProjectUpdates}>Save Changes</button></span>
+                <Row className='submitButton'>
+                    <Col md={8}></Col>
+                    <Col md={4}>
+                    <Button type="button" className="btn btn-primary" onClick={saveProjectUpdates}>Save Changes</Button>
                     </Col>
-                    <Col md={3}></Col>
                 </Row>
             </Row>
             <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} taskDetails={taskDetails} isToDosUpdated={isToDosUpdated} /></div>

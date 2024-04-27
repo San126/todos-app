@@ -38,7 +38,7 @@ const ProjectList = ({ showModal, handleVisibility, props, reloadPage }) => {
             </Modal.Header>
             <Modal.Body className="modalBody" >
                 <div className="projectlist">
-                    <table className="table table-striped table-sm" id="dataTable" >
+                    <table className="table" id="dataTable" >
                         <thead className='thead'>
                             <tr className='thead'>
                                 <th scope="col">#</th>
