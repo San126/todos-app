@@ -55,7 +55,7 @@ const ProjectList = ({ showModal, handleVisibility, props, reloadPage }) => {
                                     <td>{camelCase(item?.title)}{' '}</td>
                                     <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
                                     <td colSpan={2}>
-                                        <FontAwesomeIcon icon={faTrash} onClick={() => confirmDelete(item?.projectId, item?.listOfTodos)} title="remove task" />
+                                        <FontAwesomeIcon className="tableDeleteIcon" icon={faTrash} onClick={() => confirmDelete(item?.projectId, item?.listOfTodos)} title="remove task" />
                                     </td>
                                 </tr>
                             </tbody>

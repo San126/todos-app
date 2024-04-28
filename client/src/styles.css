@@ -1,3 +1,9 @@
+/* * {
+  background: #000 !important;
+  color: #0f0 !important;
+  outline: solid #f00 1px !important;
+} */
+
 html,
 body {
   height: auto;
@@ -7,7 +13,7 @@ body {
   background: linear-gradient(to bottom, #764a8e, #3b1554);
   margin: 0;
   margin-bottom: 20%;
-  overflow: scroll;
+  overflow: hide;
   background-size: cover;
 }
 
@@ -28,11 +34,15 @@ label {
 .login,
 .signup {
   margin: auto;
-  margin-top: 100px;
+  /* margin-top: 100px; */
   width: 60%;
   height: 80%;
   display: flex;
   background-size: cover;
+}
+
+.container {
+  margin-top: 200px;
 }
 
 .login .btn,
@@ -74,6 +84,7 @@ label {
   align-items: center;
   width: 50%;
   border: none;
+  z-index: 0;
 }
 
 .card {
@@ -130,20 +141,30 @@ label {
 }
 
 /* Vertically center the button content */
-.addButton, .prolistButton, .projectButton>button  {
+.addButton,
+.prolistButton,
+.projectButton>button {
   background-color: #271437 !important;
 }
 
-.addButton:hover, .prolistButton:hover, .projectButton>button:hover {
+.addButton:hover,
+.prolistButton:hover,
+.projectButton>button:hover {
   background: linear-gradient(to right, #271437, #271437ae) !important;
 }
 
 /* Navbar */
 .navbar {
+  width: 100%;
   background-color: #1d052d;
   padding: 20px 40px;
+  margin: 0;
   display: flex;
   justify-content: space-between;
+  position: fixed;
+  left: 0;
+  right: 0;
+  z-index: 1;
 }
 
 /* Style the logo */
@@ -179,10 +200,8 @@ label {
   background-color: transparent !important;
 }
 
-/* Style the dropdown menu */
 .menu {
   background-color: #3b1554;
-  /* Dark purple background */
 }
 
 .navbar .nav-items {
@@ -194,29 +213,23 @@ label {
 .menu .menuItem1,
 .menu .menuItem2 {
   color: #ffffff;
-  /* White text */
+  cursor: pointer;
   padding: 10px;
 }
 
-/* Style the dropdown menu items on hover */
 .menu .menuItem1>button:hover,
 .menu .menuItem2:hover {
   background-color: #662d91 !important;
   cursor: pointer;
 }
 
-
-/* Style the login link */
 .loginlink a {
   color: #ffffff;
-  /* White text */
   text-decoration: none;
 }
 
-/* Style the logout button */
 .logoutButton {
   color: #ffffff;
-  /* White text */
 }
 
 .modal-sm,
@@ -232,30 +245,30 @@ label {
   /* White */
 }
 
-/* Style the modal title */
 .modalTitle,
 .modal-title {
   color: #ffffff !important;
-  /* White */
 }
 
-/* Style the modal body */
 .modalBody,
 .modal-content .modal-body {
   background-color: #80669d !important;
-  /* Dark purple */
   color: #ffffff !important;
-  /* White */
 }
 
-/* Style the modal form */
 .modalForm label {
   color: #ffffff !important;
-  /* White */
 }
 
 .btn-dark {
-  background-color: #AB47BC;
+  background-color: white !important;
+  color: black !important;
+}
+
+.btn-dark:hover,
+.btn-dark:focus {
+  background-color: white !important;
+  color: black !important;
 }
 
 .reactstrap-confirm .modal-content .modal-body {
@@ -288,35 +301,23 @@ label {
   border-color: #9566b8 !important;
 }
 
-/* Override the primary button color on hover */
 .modalFooter .btn-primary:hover {
   background-color: #7c47a0 !important;
-  /* Medium purple */
   border-color: #7c47a0 !important;
-  /* Medium purple */
 }
 
-/* Override the secondary button color */
 .modalFooter .btn-secondary {
   background-color: #ffffff !important;
-  /* White */
   border-color: #ffffff !important;
-  /* White */
   color: #3b1554 !important;
-  /* Darker purple */
 }
 
 /* Override the secondary button color on hover */
 .modalFooter .btn-secondary:hover {
   background-color: #f8f9fa !important;
-  /* Light gray */
   border-color: #f8f9fa !important;
-  /* Light gray */
   color: #3b1554 !important;
-  /* Darker purple */
 }
-
-.modal-content .modal-header {}
 
 .form-group {
   margin-bottom: 30px;
@@ -331,7 +332,6 @@ td {
   text-align: center;
   align-content: center;
   padding: 10px;
-  /* background-color: #333 !important; */
 }
 
 tr {
@@ -344,7 +344,6 @@ tr {
   height: auto;
 }
 
-/* Header styling */
 .header {
   margin-top: -15px;
   margin-bottom: 70px;
@@ -367,18 +366,23 @@ select {
   border-radius: 0.375rem;
 }
 
-/* Gist section styling */
 .details .gist,
 .projectId {
   margin: 10px 0px 50px 0px;
   color: rgb(243, 229, 254);
 }
 
+.projectId {
+  margin-top: 90px;
+}
+
 .gist {
   width: auto;
-  height: auto;
+  height: 80px;
   border-radius: 7px;
   padding: 10px;
+  overflow-x: scroll;
+  overflow-y: hidden;
   background-color: rgba(229, 211, 244, 0.479);
 }
 
@@ -396,44 +400,43 @@ select {
   text-decoration: none;
 }
 
-/* Todos section styling */
 .todolist {
-  margin-bottom: 20px;
+  margin: 30px auto;
+  height: 80px;
+  width: 100%;
+  overflow: hidden;
 }
+
 
 /* Add icon button styling */
 .addIcon {
-  margin-top: -10px;
   background-color: green;
   border: none;
 }
 
-.addIcon:hover, .addIcon:active {
+.addIcon:hover,
+.addIcon:active {
   background-color: darkgreen !important;
 }
 
 .details .projectActions {
-  width: 80%;
-  gap: 10px;
-  text-align: center;
+
 }
 
 .details .createGist,
 .details .editIcon {
-  background-color: #1d052d;
-  padding: auto;
-  margin: auto;
-  border-radius: 3px;
+  cursor: pointer;
   color: white;
-  width: 10px;
 }
 
 .tableEditIcon {
   color: green;
+  cursor: pointer;
 }
 
 .tableDeleteIcon {
   color: red;
+  cursor: pointer;
 }
 
 .details .editIcon {
@@ -441,7 +444,6 @@ select {
 }
 
 .details .createGist {
-  text-align: left;
   color: blue;
 }
 
@@ -456,29 +458,17 @@ select {
   max-height: 120px;
 }
 
-/* .table {
-  overflow-y: auto;
-  max-height: 90px;
-} */
-
-/* Table header styling */
 .table thead th {
   background-color: #343a40;
-  /* Dark background color */
   color: #fff;
-  /* Light text color */
 }
 
-/* Table row styling */
 .table tbody tr {
   border-bottom: 1px solid #dee2e6;
-  /* Light border color */
 }
 
-/* Table cell styling */
 .table td {
   vertical-align: middle;
-  /* Center cell content vertically */
 }
 
 /* Edit and delete icons styling */
@@ -493,9 +483,11 @@ h3 {
 
 /* Save button styling */
 .submitButton .btn-primary {
+  margin: auto;
   margin-top: 50px;
   background-color: #1d052d;
   border: none;
+  width: 65%;
 }
 
 .submitButton .btn-primary:active {

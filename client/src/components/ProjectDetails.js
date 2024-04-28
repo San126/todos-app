@@ -187,46 +187,39 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
     }
 
     return (
-        <>
+        <Col style={{ "padding": "0" }}>
             <Row>
                 <NavbarContents visibility={formVisibility} reloadPage={handleReloadPage} data={data} isEditing={isEditing} />
 
-                <div className="details">
+                <Col className="details">
                     <Row className='projectId'>
                         <Col>
                             <p><h6>ProjectId: {projectId}</h6></p>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={3}></Col>
+                    <Row className='justify-content-center'>
+                        <Col md={1}></Col>
                         <Col md={5}>
-                            <Row className='header'>
-                                <h1><input className="input-border-none" type='text' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
-                            </Row>
-                            {gistUrl && <Row className='gist'>
-                                 <><h4>Gist Created:</h4> <p><a href={gistUrl} target="_blank" rel="noopener noreferrer">{gistUrl || localStorage.getItem('gistUrl')}</a></p></>
+                            <h1><input className="input-border-none" type='text' value={startCase(projectName) || startCase(values[0]?.title)} onChange={(e) => setProjectName(e.target.value)} readOnly={!isEditing} /></h1>
+                        </Col>
+                        <Col md={1} className='projectActions d-flex gap-3'>
+                            <FontAwesomeIcon className="editIcon" icon={faEdit} onClick={handleEditToggle} title="edit project title" />
+                            <FontAwesomeIcon className="createGist" styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} title="create project summary gist" />
+                        </Col>
+                    </Row>
+                    <Row className='justify-content-center' style={{ "margin-top": "50px" }}>
+                        <Col md={5}>
+                            {gistUrl && <Row className='gist' style={{ "height": "90px" }}>
+                                <><h4>Gist Created:</h4> <p><a href={gistUrl} target="_blank" rel="noopener noreferrer">{gistUrl || localStorage.getItem('gistUrl')}</a></p></>
                                 {error && <p>Error: {error}</p>}
                             </Row>}
                         </Col>
-                        <Col md={1}>
-                            <Row className='projectActions'>
-                                <Col className="editIcon" >
-                                    <FontAwesomeIcon icon={faEdit} onClick={handleEditToggle} title="edit project title" />
-                                </Col>
-                                <Col className="createGist" >
-                                    <FontAwesomeIcon styles={{ "padding-left": "10px" }} icon={faFileExport} onClick={handleFileExport} title="create project summary gist" />
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col md={2}></Col>
                     </Row>
-                    <Row className='todolist'>
-                        <Col md={3}>
-                        </Col>
+                    <Row>
                         <Col md={5}>
-                            <h3>Todos:</h3>
                         </Col>
-                        <Col md={1}>
+                        <Col md={1} className='d-flex' style={{ gap: "13px", "margin-bottom": "30px" }} >
+                            <Row ><h3>Todos:</h3></Row>
                             <Button className='addIcon' onClick={handleVisibility}>
                                 <FontAwesomeIcon icon={faAdd} title="add new task" />
                             </Button>
@@ -237,7 +230,7 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         <Col md={2}></Col>
                         <Col md={8}>
                             {!isEmpty(todos[0]) ?
-                                <table className="table table-striped table-sm" id="todoTable" >
+                                <table className="table table-striped table-sm centered" id="todoTable" >
                                     <thead className='thead'>
                                         <tr className='thead'>
                                             <th scope="col">#</th>
@@ -274,16 +267,13 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         </Col>
                         <Col md={2}></Col>
                     </Row>
-                </div>
-                <Row className='submitButton'>
-                    <Col md={8}></Col>
-                    <Col md={4}>
-                    <Button type="button" className="btn btn-primary" onClick={saveProjectUpdates}>Save Changes</Button>
-                    </Col>
-                </Row>
+                    <Row className='submitButton d-flex justify-content-center'>
+                        <Button type="button" className="btn btn-primary" onClick={saveProjectUpdates}>Save Changes</Button>
+                    </Row>
+                </Col>
             </Row>
             <div><CreateTask showModal={formVisibility} handleVisibility={handleVisibility} props={data} projectDetails={[...values]} reloadPage={handleReloadPage} taskDetails={taskDetails} isToDosUpdated={isToDosUpdated} /></div>
-        </>
+        </Col>
     );
 }
 
