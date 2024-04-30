@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const serverless = require('serverless-http');
 
 const authRouter = require('./controller');
 
@@ -26,3 +27,6 @@ mongoose.connect('mongodb://localhost:27017/todos-app', {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+app.use("/.netlify/functions/app", authRouter);
+module.exports.handler = serverless(app);
