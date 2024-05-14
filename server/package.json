@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node functions/api.js",
+    "start": "node functions/app.js",
     "build": "netlify deploy --prod"
   },
   "keywords": [],
@@ -24,6 +24,7 @@
     "serverless-http": "^3.2.0"
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "webpack-cli": "^5.1.4"
   }
 }
