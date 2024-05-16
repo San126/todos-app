@@ -17,7 +17,7 @@ const LoginForm = ({ sendData }) => {
         try {
             e.preventDefault();
             setLoginStatus("logging in");
-            const response = await axios.post('http://localhost:3001/auth/login', {
+            const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/login', {
                 username,
                 password
             });

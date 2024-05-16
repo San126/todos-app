@@ -1,5 +1,5 @@
 import { Dropdown, DropdownMenu, DropdownToggle } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { isEmpty } from "lodash";
 
 import axios from 'axios';
@@ -13,7 +13,7 @@ const NavbarContents = ({ data, isEditing, pathName = '' }) => {
   const logOut = async (e) => {
     try {
       e.preventDefault();
-      const response = await axios.post('http://localhost:3001/auth/logout', {})
+      const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/logout', {})
         .then(
           alert("Logged out..."))
         .then(() =>

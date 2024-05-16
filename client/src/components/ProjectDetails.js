@@ -33,7 +33,7 @@ const ProjectDetails = ({ props }) => {
 
     useEffect(() => {
         // Fetch data from the server
-        fetch(`http://localhost:3001/auth/details?projectId=${projectId}`)
+        fetch(`https://todosnode-backend.netlify.app/.netlify/functions/app/details?projectId=${projectId}`)
             .then(response => response.json())
             .then(data => (setValues([data._doc]),
                 setTodos([data.todoListDetails])))
@@ -67,7 +67,7 @@ const ProjectDetails = ({ props }) => {
             });
 
             if (result) {
-                await axios.delete(`http://localhost:3001/auth/delete?taskId=${taskId}`).then(
+                await axios.delete(`https://todosnode-backend.netlify.app/.netlify/functions/app/delete?taskId=${taskId}`).then(
                 );
                 setValues(values.filter((post) => post.taskId !== taskId));
                 alert("Task deleted");
@@ -112,7 +112,7 @@ const ProjectDetails = ({ props }) => {
     const saveProjectUpdates = async () => {
         try {
             if (isEditing) {
-                const response = await axios.post('http://localhost:3001/auth/create', {
+                const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/create', {
                     createdBy: userName,
                     title: values[0]?.title,
                     updatedTitle: projectName,

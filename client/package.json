@@ -27,7 +27,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "https://todosnode-backend.netlify.app/.netlify/functions/app",
   "eslintConfig": {
     "extends": [
       "react-app",

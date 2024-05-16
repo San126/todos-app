@@ -9,7 +9,7 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
 
   const createNewProject = async () => {
     try {
-      const response = await axios.post('http://localhost:3001/auth/create', {
+      const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/create', {
         createdBy: userName,
         title,
       });
