@@ -1,2 +1,4 @@
 node_modules
-client/build
+package-lock.json
+.netlify
+build
