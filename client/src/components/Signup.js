@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
 import '../styles.css';
 import NavbarContents from './NavbarContents';
 
-//ssignup pages
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmedPassword, setConfirmedPassword] = useState('');
-    const [loginStatus, setLoginStatus] = useState('');
-    const [userDetails, setUserDetails] = useState('');
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         try {
             e.preventDefault();
-            const response = await axios.post('http://localhost:3001/auth/signup', {
+            const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/signup', {
                 username,
                 password
             }).then(() => {
@@ -26,7 +24,7 @@ const Signup = () => {
                 alert("Signed up successfully. Login now.");
                 console.log('Signed up successfully:');
             }).catch((error) => {
-                alert(error.response.data.message);
+                alert(error?.response?.data?.message);
                 console.log('Error while login', error);
             });
         }

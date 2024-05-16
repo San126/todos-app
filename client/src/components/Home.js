@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { startCase, upperFirst } from 'lodash';
 import { Link } from 'react-router-dom';
-import { Row, Col, Button, Card, CardBody, CardFooter, Dropdown, DropdownButton, DropdownItem } from 'react-bootstrap';
+import { Row, Col, Button, Card, CardBody, CardFooter, Dropdown, DropdownButton } from 'react-bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFolderOpen } from '@fortawesome/free-solid-svg-icons';
@@ -23,7 +23,7 @@ const Home = ({ }) => {
 
     useEffect(() => {
         // Fetch data from the server
-        fetch(`http://localhost:3001/auth/projectlist?userName=${username}`)
+        fetch(`https://todosnode-backend.netlify.app/.netlify/functions/app/projectlist?userName=${username}`)
             .then(response => response.json())
             .then(data => setValues([...data]))
             .then(localStorage.setItem('loginStatus', JSON.stringify(true)))

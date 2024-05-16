@@ -20,7 +20,7 @@ const ProjectList = ({ showModal, handleVisibility, props, reloadPage }) => {
             const confirmed = window.confirm("Are you sure you want to delete this item?");
             const todoIds = listOfTodos?.taskIds || [];
             if (confirmed) {
-                const response = await axios.delete(`http://localhost:3001/auth/deleteproject?projectId=${projectId}&&todoIds=${[...todoIds]}`);
+                const response = await axios.delete(`https://todosnode-backend.netlify.app/.netlify/functions/app/deleteproject?projectId=${projectId}&&todoIds=${[...todoIds]}`);
                 if (response) {
                     reloadPage();
                     alert("Project deleted");
