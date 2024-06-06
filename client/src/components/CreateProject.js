@@ -9,15 +9,20 @@ const CreateProject = ({ showModal, handleVisibility, reloadPage, props }) => {
 
   const createNewProject = async () => {
     try {
-      const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/create', {
-        createdBy: userName,
-        title,
-      });
-      handleVisibility(false);
-      setValues([...values, response.data]);
-      reloadPage();
-      alert('Project created successfully');
-      console.log('Project created successfully:', response.data);
+      if (title) {
+        const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/create', {
+          createdBy: userName,
+          title,
+        });
+        handleVisibility(false);
+        setValues([...values, response.data]);
+        reloadPage();
+        alert('Project created successfully');
+        console.log('Project created successfully:', response.data);
+      }
+      else {
+        alert("Please provide project title");
+      }
     } catch (error) {
       alert(error.response?.data?.message);
       console.error('Error creating project:', error);

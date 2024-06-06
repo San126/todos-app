@@ -67,6 +67,9 @@ const Signup = () => {
                                     placeholder="Enter your password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,16}$" 
+                                    maxlength="16" 
+                                    title="Password must be 8-16 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
                                     required
                                 />
                                 <div className="invalid-feedback">

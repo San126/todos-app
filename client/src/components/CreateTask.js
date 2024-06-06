@@ -13,20 +13,25 @@ const CreateTask = ({ showModal, handleVisibility, reloadPage, props, projectDet
 
     const createAndUpdateTask = async () => {
         try {
-            const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/createtask', {
-                projectId,
-                taskId: todoId,
-                description: task || description,
-                statusValue: statusValue || status,
-                createdBy: userName
-            });
-            isToDosUpdated(true);
-            handleVisibility(false);
-            setValues([...values, response?.data]);
-            localStorage.setItem('gistUrl', '');
-            reloadPage();
-            alert(todoId?'Task updated successfully':'Task created successfully');
-            console.log('Task created successfully:', response?.data);
+            if (task && statusValue) {
+                const response = await axios.post('https://todosnode-backend.netlify.app/.netlify/functions/app/createtask', {
+                    projectId,
+                    taskId: todoId,
+                    description: task || description,
+                    statusValue: statusValue || status,
+                    createdBy: userName
+                });
+                isToDosUpdated(true);
+                handleVisibility(false);
+                setValues([...values, response?.data]);
+                localStorage.setItem('gistUrl', '');
+                reloadPage();
+                alert(todoId ? 'Task updated successfully' : 'Task created successfully');
+                console.log('Task created successfully:', response?.data);
+            }
+            else {
+                alert("Please provide the task name and status");
+            }
         } catch (error) {
             alert(error?.response?.data?.message);
             console.error('Error creating project:', error);

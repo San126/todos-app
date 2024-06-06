@@ -26,6 +26,8 @@ const ProjectDetails = ({ props }) => {
     const [isTodoUpdated, setIsTodoUpdated] = useState(false);
     const [gistUrl, setGistUrl] = useState(localStorage.getItem('gistUrl') || '');
     const [error, setError] = useState(null);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [todoNames, setToDoNames] =useState([]);
     const { username: userName = "" } = data || {};
     let count = 0;
     const table = document.getElementById('todoTable');
@@ -227,6 +229,9 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         <Col md={3}></Col>
                     </Row>
                     <Row>
+                        <input type="text" onChange={(e) => setSearchTerm(e.target.value)} placeholder="search tasks..." />
+                    </Row>
+                    <Row>
                         <Col md={2}></Col>
                         <Col md={8}>
                             {!isEmpty(todos[0]) ?
@@ -241,7 +246,9 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                                             <th scope="col">Actions</th>
                                         </tr>
                                     </thead>
-                                    {todos[0]?.map((item) => (
+                                    {todos[0]?.filter(item => item?.description.includes(searchTerm)).
+                                    map((item) => (
+
                                         <tbody>
                                             <script>{count += 1}</script>
                                             <tr className='trow' index={item?._id} data-toggle="modal">
