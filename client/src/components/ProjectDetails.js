@@ -27,7 +27,6 @@ const ProjectDetails = ({ props }) => {
     const [gistUrl, setGistUrl] = useState(localStorage.getItem('gistUrl') || '');
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
-    const [todoNames, setToDoNames] =useState([]);
     const { username: userName = "" } = data || {};
     let count = 0;
     const table = document.getElementById('todoTable');
@@ -228,8 +227,10 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                         </Col>
                         <Col md={3}></Col>
                     </Row>
-                    <Row>
-                        <input type="text" onChange={(e) => setSearchTerm(e.target.value)} placeholder="search tasks..." />
+                    <Row style={{ marginTop: "5px", marginBottom: "15px" }}>
+                        <Col md={8}></Col>
+                        <Col md={1}><input style={{ border: "1px solid whitesmoke", borderRadius: "4px" }} type="text" onChange={(e) => setSearchTerm(e.target.value)} placeholder="search tasks..." />
+                        </Col>
                     </Row>
                     <Row>
                         <Col md={2}></Col>
@@ -247,23 +248,22 @@ ${completedTodos?.map(task => `- [x] ${task?.description}`).join('\n') || "None"
                                         </tr>
                                     </thead>
                                     {todos[0]?.filter(item => item?.description.includes(searchTerm)).
-                                    map((item) => (
-
-                                        <tbody>
-                                            <script>{count += 1}</script>
-                                            <tr className='trow' index={item?._id} data-toggle="modal">
-                                                <td>{count}{' '}</td>
-                                                <td>{startCase(item?.description)}{' '}</td>
-                                                <td>{startCase(item?.status)}{' '}</td>
-                                                <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
-                                                <td> {moment(item?.updatedAt).format('DD/MM/YYYY hh:mm A')}</td>
-                                                <td colSpan={2}>
-                                                    <FontAwesomeIcon className="tableEditIcon" icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} title="edit task" />
-                                                    <FontAwesomeIcon className="tableDeleteIcon" icon={faTrash} onClick={() => deleteTask(item?.taskId)} title="remove task" />
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    ))
+                                        map((item) => (
+                                            <tbody>
+                                                <script>{count += 1}</script>
+                                                <tr className='trow' index={item?._id} data-toggle="modal">
+                                                    <td>{count}{' '}</td>
+                                                    <td>{startCase(item?.description)}{' '}</td>
+                                                    <td>{startCase(item?.status)}{' '}</td>
+                                                    <td> {moment(item?.createdAt).format('DD/MM/YYYY hh:mm A')}</td>
+                                                    <td> {moment(item?.updatedAt).format('DD/MM/YYYY hh:mm A')}</td>
+                                                    <td colSpan={2}>
+                                                        <FontAwesomeIcon className="tableEditIcon" icon={faEdit} onClick={handleVisibility} style={{ paddingRight: "20px" }} title="edit task" />
+                                                        <FontAwesomeIcon className="tableDeleteIcon" icon={faTrash} onClick={() => deleteTask(item?.taskId)} title="remove task" />
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        ))
                                     }
                                 </table>
                                 :
