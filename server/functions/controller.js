@@ -82,46 +82,64 @@ router.get('/projectlist', async (req, res) => {
 
 router.post('/create', async (req, res) => {
   try {
-    const { createdBy, title, action = 'create', updatedTitle = '' } = req.body;
+    const { createdBy, title, updatedTitle = '', action: frontEndAction = '' } = req.body;
     let projectId = '';
     const createdAt = new Date();
-    const details = await ProjectModel.findOne({ title: snakeCase(title), createdBy });
-    const projectDetails = details && details.toJSON();
+    let newTitle = frontEndAction === 'create' ? snakeCase(title) : updatedTitle && snakeCase(updatedTitle);
+    let details = await ProjectModel.findOne({ title: newTitle, createdBy });
+    let projectDetails = {};
+    let actions = 'Created';
+    let action = '';
 
-    if (projectDetails && action === "create") {
+    if (isEmpty(details)) {
+      details = await ProjectModel.findOne({ title: snakeCase(title), createdBy });
+      projectDetails = details && details.toJSON();
+      action = updatedTitle && !isEmpty(projectDetails) && 'update' || !updatedTitle && isEmpty(projectDetails) && 'create';
+      // if (updatedTitle && !isEmpty(projectDetails)) {
+      //   action = 'update';
+      // }
+      // else if (!updatedTitle && isEmpty(projectDetails)) {
+      //   action = 'create';
+      // }
+
+
+      if (projectDetails && action === "update") {
+        projectId = projectDetails.projectId;
+        actions = 'Updated';
+      }
+      else {
+        projectId = await getNextSequenceValue('projects');
+      }
+
+      const options = {
+        new: true, // Return the updated document
+        upsert: true, // Insert if not exists, update if exists
+        setDefaultsOnInsert: true // Set default values when inserting new document
+      };
+
+      const updatedData = {
+        ...projectDetails,
+        createdAt,
+        createdBy,
+        title: newTitle
+      }
+
+      const newProject = await ProjectModel.findOneAndUpdate(
+        { projectId },
+        updatedData,
+        options
+      );
+
+      res.status(201).json({ message: `Project ${actions} Successfully`, data: { newProject } });
+    }
+    else if (projectDetails && !["create", "update"].includes(action)) {
       return res.status(500).json({
         message: "Project name already exists",
         type: 'warning'
       });
     }
-    else if (projectDetails) {
-      projectId = projectDetails.projectId;
-    }
-    else {
-      projectId = await getNextSequenceValue('projects');
-    }
-
-    const options = {
-      new: true, // Return the updated document
-      upsert: true, // Insert if not exists, update if exists
-      setDefaultsOnInsert: true // Set default values when inserting new document
-    };
-
-    const updatedData = {
-      ...projectDetails,
-      createdAt,
-      createdBy,
-      title: updatedTitle ? snakeCase(updatedTitle) : snakeCase(title)
-    }
-
-    const newProject = await ProjectModel.findOneAndUpdate(
-      { projectId },
-      updatedData,
-      options
-    );
-
-    res.status(201).json({ message: "Project Updated Successfully", data: { newProject } });
-  } catch (error) {
+  }
+  catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
@@ -155,7 +173,15 @@ const getTodoList = async (todoIds) => {
 
 router.post('/createtask', async (req, res) => {
   try {
-    const { projectId = '', description = '', statusValue = '', createdBy = '', taskId: todoId = '' } = req.body;
+    const {
+      projectId = '',
+      description = '',
+      statusValue = '',
+      createdBy = '',
+      taskId: todoId = '',
+      forceCreate = false // NEW field
+    } = req.body;
+
     const projectIdAsObjectId = new ObjectId(projectId);
     let todoTasks = [];
     const updatedAt = new Date();
@@ -166,8 +192,21 @@ router.post('/createtask', async (req, res) => {
       if (!isEmpty(projectDetails?.listOfTodos?.taskIds)) {
         todoTasks = projectDetails.listOfTodos.taskIds || [];
       }
+
+      const descriptions = await TodoModel.find(
+        { taskId: { $in: todoTasks } },
+        { description: 1, _id: 0 } // projection: only `description` field, omit `_id`
+      );
+
       const details = await TodoModel.findOne({ taskId: todoId });
+      const duplicateTask = await TodoModel.findOne({ description: { $in: descriptions } });
+
       const toDoDetails = details && details.toJSON();
+
+      // If duplicate found and not forcing creation, return 409
+      if (duplicateTask && !forceCreate) {
+        return res.status(409).json({ message: 'Duplicate task description found' });
+      }
 
       if (isEmpty(toDoDetails)) {
         taskId = await getNextSequenceValue('todos');
@@ -176,6 +215,7 @@ router.post('/createtask', async (req, res) => {
       const taskIdsArray = projectDetails?.listOfTodos?.taskIds ?? [];
       taskIdsArray.push(taskId);
       projectDetails.listOfTodos.taskIds = taskIdsArray;
+
       const updatedData = {
         ...toDoDetails,
         updatedAt,
@@ -185,10 +225,11 @@ router.post('/createtask', async (req, res) => {
       };
       updatedData.taskId = toDoDetails?.taskId || taskId;
       updatedData.createdAt = updatedAt;
+
       const options = {
-        new: true, // Return the updated document
-        upsert: true, // Insert if not exists, update if exists
-        setDefaultsOnInsert: true // Set default values when inserting new document
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true
       };
 
       const projectUpdate = new ProjectModel(projectDetails);
@@ -200,12 +241,14 @@ router.post('/createtask', async (req, res) => {
 
       await projectUpdate.save();
 
-      res.status(201).json({ message: "Task Updated Successfully", data: { newTodo, projectUpdate } });
+      res.status(201).json({ message: "Task Created/Updated Successfully", data: { newTodo, projectUpdate } });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 router.delete('/delete', async (req, res) => {
   try {
