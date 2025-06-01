@@ -1,0 +1,29 @@
+# This netlify.toml file MUST be at the root of your Git repository
+# (e.g., C:\Users\sandr\todos-app\netlify.toml)
+
+plugins = []
+headers = []
+redirects = []
+
+# --- Build Settings ---
+# We are only configuring the base directory for the functions.
+# No 'command' or 'publish' for a static site, as you only want to deploy backend functions.
+[build]
+  # 'base' tells Netlify to change into this directory before finding your functions.
+  # This path is RELATIVE to the Git repository root.
+  base = "server"
+
+  # No 'command' here for frontend build.
+  # No 'publish' here for frontend static site.
+
+# --- Netlify Functions Settings ---
+# This section configures where Netlify can find your serverless functions.
+[functions]
+  # 'directory' specifies the folder where your Netlify Functions source code is located.
+  # This path is RELATIVE to the 'base' directory (server/).
+  directory = "functions" # Your image shows 'app.js' inside 'functions', so this is correct.
+
+# Optional: You can add specific configurations for your functions here if needed.
+# For example, to use esbuild for faster bundling of Node.js functions:
+# [functions."*"]
+#   node_bundler = "esbuild"
