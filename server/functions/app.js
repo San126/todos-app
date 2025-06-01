@@ -33,7 +33,7 @@ app.use((err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 });
 // Mounting the router from controller.js at '/.netlify/functions/app' endpoint
-app.use("/.netlify/functions/app", authRouter);
+   app.use("/.netlify/functions/app", authRouter);
 // app.listen(port, () => {
 //     console.log(`Server is running on http://localhost:${port}`);
 //   });
